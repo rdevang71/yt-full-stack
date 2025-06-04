@@ -1,0 +1,15 @@
+{
+  "name": "yt-full-stack",
+  "version": "1.0.0",
+  "description": "creating the yt clone full stack",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "devang",
+    "backend"
+  ],
+  "author": "Devang Rajput",
+  "license": "ISC"
+}
