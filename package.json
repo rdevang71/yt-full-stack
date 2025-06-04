@@ -2,14 +2,18 @@
   "name": "yt-full-stack",
   "version": "1.0.0",
   "description": "creating the yt clone full stack",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon src/index.js"
   },
   "keywords": [
     "devang",
     "backend"
   ],
   "author": "Devang Rajput",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
 }
