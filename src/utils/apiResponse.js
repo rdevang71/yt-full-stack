@@ -3,6 +3,8 @@ class apiResponse{
         this.statusCode = ststusCode
         this.data = data
         this.message = message 
-        this.success= ststusCode
+        this.success= statusCode
     }
 }
+
+export {apiResponse}
