@@ -20,7 +20,7 @@ const registerUser = asyncHandler(async (req,res)=>{
             throw new apiError(400, "All Fields Are Required!!")
       }
       // check if user already exist : username , email
-      const existedUser=User.findOne({
+      const existedUser= await User.findOne({
             $or:[ { username } , { email }]
       })
       if(existedUser) {
@@ -49,11 +49,12 @@ const registerUser = asyncHandler(async (req,res)=>{
       // create user object - create entry in db
       const user = await User.create({
             fullName,
+            username: username.toLowerCase(),
             avatar: avatar.url,
-            coverImage: coverImage?.url || "",
+            coverImage: coverImage?.secure_url || "",
             email,
             password,
-            username: username.toLowerCase()
+            
       })
 
       
