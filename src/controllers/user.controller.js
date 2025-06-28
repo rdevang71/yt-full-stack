@@ -84,6 +84,8 @@ const loginUser = asyncHandler(async (req,res) =>{
        if(!username || !email){
           throw new apiError(400,"username or email is required!")
       }
+
+
       // find the user
       const user = await User.findOne({
             $or:[{username},{email}]
@@ -92,7 +94,13 @@ const loginUser = asyncHandler(async (req,res) =>{
       if(!user){
             throw new apiError(404,"User does not exixt!")
       }
+
+
       //password check
+      const isPasswordValid =await user.isPasswordCorrect(password)
+      if(!isPasswordValid){
+            throw new apiError(401,"Incorrect Password!")
+      }
       // access and refresh token
       //send cookie
       // send response
