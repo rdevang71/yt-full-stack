@@ -128,9 +128,28 @@ const loginUser = asyncHandler(async (req,res) =>{
       const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
 
       //send cookie
-      // send response
+      const options = {
+            httpOnly: true,
+            secure: true,
+      }
+      
+      return res
+      .status(200)
+      .cookie("accessToken" , accessToken , options)
+      .cookie("refreshToken", refreshToken, options)
+      .json(
+            new apiResponse(
+                  200,
+                  {
+                     user: loggedInUser , accessToken , refreshToken 
+                  },
+                  "User logged in successfully"
+            )
+      )
 
 })
+
+
 
 export {
       registerUser,
