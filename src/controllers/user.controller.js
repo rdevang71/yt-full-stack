@@ -4,6 +4,16 @@ import {User} from "../models/user.model.js"
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { apiResponse } from "../utils/apiResponse.js";
 
+const generateAccessAndRefreshTokens = async(userId)=>{
+      try {
+            const user = await User.findById(userId)
+            const accessToken = user.generateAccessToken()
+            const refreshToken = user.generateRefreshToken()
+      } catch (error) {
+            throw new apiError(500,"Something went wrong While generating refresh and access token")
+      }
+}
+
 const registerUser = asyncHandler(async (req,res)=>{
       //get user details from frontend
       const {username , email , fullName ,password}=req.body
@@ -101,6 +111,8 @@ const loginUser = asyncHandler(async (req,res) =>{
       if(!isPasswordValid){
             throw new apiError(401,"Incorrect Password!")
       }
+
+
       // access and refresh token
       //send cookie
       // send response
