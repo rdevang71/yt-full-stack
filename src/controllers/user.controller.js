@@ -276,7 +276,11 @@ const updateAccountDetails = asyncHandler(async(req,res)=>{
     },
     {new : true}
   )
-  .select(" -password")
+  .select("-password")
+
+  return res
+  .status(200)
+  .json(new apiResponse(200, user, "Account details updated successfully "))
 })
 
 export {
@@ -286,4 +290,5 @@ export {
   refreshAccessToken,
   changeCurrentPassword,
   getCurrentUser,
+  updateAccountDetails
 };
