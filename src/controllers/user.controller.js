@@ -410,9 +410,17 @@ const getUserChannelDetails = asyncHandler(async (req, res) => {
       }
     }
   ])
+
+
   if (!channel?.length) {
     throw new apiError(404, "channel does not exist!")
   }
+
+  return res
+  .status(200)
+  .json(
+    new apiResponse(200,channel[0],"User channel fetched successfully !")
+  )
 });
 
 
