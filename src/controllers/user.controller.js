@@ -357,7 +357,39 @@ const getUserChannelDetails = asyncHandler(async (req, res) => {
     throw new apiError(400, " username is missing")
   }
 
-  
+  const channel = await User.aggregate([
+    {
+      $match:{
+        username: username?.toLowerCase()
+      }
+    },
+    {
+      $lookup:{
+        from: "subscriptions",
+        localField:"_id",
+        foreignField:"channel",
+        as: "subscribers"
+      }
+    },
+    {
+      $lookup:{
+        from: "subscriptions",
+        localField:"_id",
+        foreignField:"subscriber",
+        as: "subscribedTo"
+      }
+    },
+    {
+      $addFields:{
+        subscribersCount:{
+             $size: "$subscribers"
+        },
+        channelsSubscribedToCount:{
+          $size:"subscribedTo"
+        }
+      }
+    }
+  ])
 });
 
 
