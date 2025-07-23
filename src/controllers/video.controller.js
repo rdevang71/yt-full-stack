@@ -79,7 +79,7 @@ const publishAVideo = asyncHandler(async (req, res) => {
 });
 
 const getVideoById = asyncHandler(async (req, res) => {
-  const { videoId } = req.params;
+  const { videoId } = req.query;
 
   if (!mongoose.Types.ObjectId.isValid(videoId)) {
     throw new apiError(400, "Invalid video ID");
@@ -99,7 +99,7 @@ const getVideoById = asyncHandler(async (req, res) => {
 });
 
 const updateVideo = asyncHandler(async (req, res) => {
-  const { videoId } = req.params;
+  const { videoId } = req.query;
   const { title, description } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(videoId)) {
@@ -136,7 +136,7 @@ const updateVideo = asyncHandler(async (req, res) => {
 });
 
 const deleteVideo = asyncHandler(async (req, res) => {
-    const { videoId } = req.params
+    const { videoId } = req.query
 
     if (!mongoose.Types.ObjectId.isValid(videoId)) {
     throw new apiError(400, "Invalid video ID");

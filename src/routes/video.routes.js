@@ -25,8 +25,7 @@ router.route("/publish-video").post(
 
 router.route("/video/:videoId").get(verifyJWT, getVideoById);
 
-router
-  .route("/video/:videoId")
+router.route("/video/:videoId")
   .put(
     verifyJWT,
     upload.fields([{ name: "thumbnail", maxCount: 1 }]),
