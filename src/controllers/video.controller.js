@@ -160,7 +160,7 @@ const deleteVideo = asyncHandler(async (req, res) => {
 })
 
 const togglePublishStatus = asyncHandler(async (req, res) => {
-  const { videoId } = req.params;
+  const { videoId } = req.query;
 
   if (!mongoose.Types.ObjectId.isValid(videoId)) {
     throw new apiError(400, "Invalid video ID");

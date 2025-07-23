@@ -35,7 +35,7 @@ router.route("/video/:videoId")
 router.route("/video/:videoId").delete(verifyJWT, deleteVideo);
 
 router
-  .route("/video/:videoId/toggle-publish")
+  .route("/video/:videoId")
   .patch(verifyJWT, togglePublishStatus);
 
 export default router;
