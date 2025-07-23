@@ -2,6 +2,8 @@ import { Router } from "express";
 import {
   getAllVideos,
   getVideoById,
+  deleteVideo,
+  togglePublishStatus,
   publishAVideo,
   updateVideo,
 } from "../controllers/video.controller.js";
