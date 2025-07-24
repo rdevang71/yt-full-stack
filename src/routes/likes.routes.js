@@ -3,9 +3,9 @@ import { toggleCommentLike,
     toggleTweetLike,
     toggleVideoLike,
     getLikedVideos
- } from "../controllers/likes.controller";
+ } from "../controllers/likes.controller.js";
 
-import { verifyJWT } from "../middlewares/auth.middleware";
+import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
