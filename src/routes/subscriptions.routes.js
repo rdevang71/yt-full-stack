@@ -13,4 +13,7 @@ import { toggleSubscription,
  router.route("/get-subscribers/:channelId").patch(verifyJWT, getUserChannelSubscribers)
 
 
+ router.route("/get-channels/:subscriberId").patch(verifyJWT, getSubscribedChannels)
+
+
  export default router;
