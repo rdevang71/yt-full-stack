@@ -49,5 +49,36 @@ const getVideoComments = asyncHandler(async (req, res) => {
   );
 });
 
+const addComment = asyncHandler(async (req, res) => {
+    const { content, videoId } = req.body;
 
-export {getVideoComments} ;
+    if(!content){
+        throw new apiError(400,"Content of the comment is required")
+    }
+
+    const comment = await Comment.create({
+        content,
+        video: videoId,
+        owner : req.user._id
+    })
+
+    const addedComment = await Comment.findById(comment._id).populate(
+        "owner",
+        "username avatar"
+    );
+
+    if(!addedComment){
+        throw new apiError(500, " Something went wrong when publishing the comment")
+    }
+    return res
+    .status(201)
+    .json(
+        new apiResponse(200 , addedComment, " Comment Added Successfully")
+    );
+
+})
+
+
+export {getVideoComments,
+    addComment
+} ;
