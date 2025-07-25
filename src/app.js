@@ -30,7 +30,7 @@ app.use("/api/v1/users", userRouter)
 app.use("/api/v1/videos", videoRouter)
 app.use("/api/v1/subscriptions", subscribtionRouter)
 app.use("/api/v1/likes",likesRouter)
-app.use("/api/vi/comment",commentRouter)
+app.use("/api/v1/comment",commentRouter)
 
 
 

@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import mongoose, { isValidObjectId } from "mongoose";
 import { Comment } from "../models/comment.model.js";
 import { apiError } from "../utils/apiErrors.js";
