@@ -145,7 +145,7 @@ const addVideoToPlaylist = asyncHandler(async (req, res) => {
     );
   }
 
-  const totalVideosInPlaylist = await updatePlaylist.video.length;
+  const totalVideosInPlaylist = updatedPlaylist.video.length;
 
   return res
     .status(200)
