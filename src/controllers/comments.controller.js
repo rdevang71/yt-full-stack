@@ -115,7 +115,7 @@ const deleteComment = asyncHandler(async (req, res) => {
     const { commentId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(commentId)) {
-    throw new apiError(404, "Invalid Comment id ");
+    throw new apiError(400, "Invalid Comment id ");
   }
 
   const comment = await Comment.findById(commentId);
@@ -128,7 +128,7 @@ const deleteComment = asyncHandler(async (req, res) => {
     throw new apiError(403, "You are not authorized to delete this Comment");
   }
 
-await comment.deleteOne();
+await Comment.deleteOne({ _id: commentId });
 
 return res
 .status(200)
