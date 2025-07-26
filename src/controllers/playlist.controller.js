@@ -4,6 +4,7 @@ import { apiError } from "../utils/apiErrors.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { User } from "../models/user.model.js";
+import { Video } from "../models/video.model.js";
 
 const createPlaylist = asyncHandler(async (req, res) => {
   const { name, description } = req.body;
@@ -79,40 +80,130 @@ const getUserPlaylists = asyncHandler(async (req, res) => {
   );
 });
 
-
-
 const getPlaylistById = asyncHandler(async (req, res) => {
   const { playlistId } = req.params;
-  
-  if(!mongoose.Types.ObjectId.isValid(playlistId)){
-    throw new apiError(400,"Invalid playlist ID")
+
+  if (!mongoose.Types.ObjectId.isValid(playlistId)) {
+    throw new apiError(400, "Invalid playlist ID");
   }
 
-  const playlist = await Playlist.findById(playlistId).populate("owner","username avatar")
+  const playlist = await Playlist.findById(playlistId).populate(
+    "owner",
+    "username avatar"
+  );
 
-  if(!playlist){
-    throw new apiError(404,"playlist not found")
+  if (!playlist) {
+    throw new apiError(404, "playlist not found");
   }
 
   return res
-  .status(200)
-  .json(
-    new apiResponse(
-        200,
-        playlist,
-        "playlist fetched successfully"
-    )
-  )
+    .status(200)
+    .json(new apiResponse(200, playlist, "playlist fetched successfully"));
 });
 
 const addVideoToPlaylist = asyncHandler(async (req, res) => {
   const { playlistId, videoId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(videoId)) {
+    throw new apiError(400, "Invalid Video ID");
+  }
+
+  const video = await Video.findById(videoId).populate(
+    "owner",
+    "username avatar"
+  );
+
+  if (!video) {
+    throw new apiError(404, "Video not found");
+  }
+
+  if (!mongoose.Types.ObjectId.isValid(playlistId)) {
+    throw new apiError(400, "Invalid playlist ID");
+  }
+
+  const playlist = await Playlist.findById(playlistId).populate(
+    "owner",
+    "username avatar"
+  );
+
+  if (!playlist) {
+    throw new apiError(404, "playlist not found");
+  }
+
+  const updatedPlaylist = await Playlist.findByIdAndUpdate(
+    playlistId,
+    {
+      $push: { video: videoId },
+    },
+    { new: true }
+  );
+
+  if (!updatedPlaylist) {
+    throw new apiError(
+      400,
+      " Something went wrong while adding video to the playlist"
+    );
+  }
+
+  const totalVideosInPlaylist = await updatePlaylist.video.length;
+
+  return res
+    .status(200)
+    .json(
+      new apiResponse(
+        200,
+        { updatedPlaylist, totalVideosInPlaylist },
+        "Video addeded to the playlist successfully"
+      )
+    );
 });
 
 const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
   const { playlistId, videoId } = req.params;
-  // TODO: remove video from playlist
+
+  if (!mongoose.Types.ObjectId.isValid(videoId)) {
+    throw new apiError(400, "Invalid Video ID");
+  }
+
+  const video = await Video.findById(videoId).populate("owner", "username avatar");
+  if (!video) {
+    throw new apiError(404, "Video not found");
+  }
+
+  if (!mongoose.Types.ObjectId.isValid(playlistId)) {
+    throw new apiError(400, "Invalid playlist ID");
+  }
+
+  const playlist = await Playlist.findById(playlistId).populate("owner", "username avatar");
+  if (!playlist) {
+    throw new apiError(404, "Playlist not found");
+  }
+
+  const videoExists = playlist.video.some(
+    (v) => v.toString() === videoId
+  );
+
+  if (!videoExists) {
+    throw new apiError(400, "Video not found in the playlist");
+  }
+
+  const updatedPlaylist = await Playlist.findByIdAndUpdate(
+    playlistId,
+    {
+      $pull: { video: videoId },
+    },
+    { new: true }
+  );
+
+  return res.status(200).json(
+    new apiResponse(
+      200,
+      updatedPlaylist,
+      "Video removed from playlist successfully"
+    )
+  );
 });
+
 
 const deletePlaylist = asyncHandler(async (req, res) => {
   const { playlistId } = req.params;
