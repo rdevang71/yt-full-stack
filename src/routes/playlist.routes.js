@@ -13,7 +13,7 @@ import { verifyJWT } from "../middlewares/auth.middleware.js";
 const router = Router();
 
 router.route("/create-playlist").post(verifyJWT, createPlaylist)
-router.route("/get-userPlaylist").get(verifyJWT, getUserPlaylists)
+router.route("/get-userplaylist").get(verifyJWT, getUserPlaylists)
 router.route("/get-playlist/:playlistId").get(verifyJWT, getPlaylistById)
 router.route("/add-video/:playlistId/:videoId").post(verifyJWT, addVideoToPlaylist)
 router.route("/remove-video/:playlistId/:videoId").patch(verifyJWT, removeVideoFromPlaylist)
