@@ -1,207 +1,55 @@
-const API_URL = process.env.REACT_APP_API_URL;
+import axios from 'axios';
 
-// ---------------- REGISTER USER (with files) ----------------
-export const registerUser = async (formData) => {
-  try {
-    const res = await fetch(`${API_URL}/auth/register`, {
-      method: "POST",
-      body: formData,
-    });
+const API = axios.create({
+  baseURL: 'http://localhost:8000/api/v1',
+  withCredentials: true,
+});
 
-    const json = await res.json();
-    if (!res.ok) throw new Error(json.message || "Registration failed");
-    return json;
-  } catch (error) {
-    throw new Error(error.message || "Something went wrong");
-  }
-};
+export const registerUser = async ({
+  fullName,
+  username,
+  email,
+  password,
+  avatarFile,
+  coverImageFile,
+}) => {
+  const formData = new FormData();
+  formData.append("fullName", fullName);
+  formData.append("username", username);
+  formData.append("email", email);
+  formData.append("password", password);
 
-// ---------------- LOGIN USER ----------------
-export const loginUser = async (data) => {
-  try {
-    const res = await fetch(`${API_URL}/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include", // To handle refresh token cookies if used
-      body: JSON.stringify(data),
-    });
-
-    const json = await res.json();
-    if (!res.ok) throw new Error(json.message || "Login failed");
-    return json;
-  } catch (error) {
-    throw new Error(error.message || "Something went wrong");
-  }
-};
-
-// ---------------- LOGOUT USER ----------------
-export const logoutUser = async () => {
-  try {
-    const res = await fetch(`${API_URL}/auth/logout`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // or cookie if you're using httpOnly
-      },
-    });
-
-    const json = await res.json();
-    if (!res.ok) throw new Error(json.message || "Logout failed");
-    return json;
-  } catch (error) {
-    throw new Error(error.message || "Something went wrong");
-  }
-};
-
-
-
-// ---------------- CHANGE PASSWORD ----------------
-export const changePassword = async (passwords) => {
-  try {
-    const res = await fetch(`${API_URL}/auth/change-password`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-      credentials: "include",
-      body: JSON.stringify(passwords), // { oldPassword, newPassword }
-    });
-
-    const json = await res.json();
-    if (!res.ok) throw new Error(json.message || "Password change failed");
-    return json;
-  } catch (error) {
-    throw new Error(error.message || "Something went wrong");
-  }
-};
-
-
-
-// ---------------- GET CURRENT USER ----------------
-export const getCurrentUser = async () => {
-  try {
-    const res = await fetch(`${API_URL}/auth/current-user`, {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-    });
-
-    const json = await res.json();
-    if (!res.ok) throw new Error(json.message || "Failed to fetch user");
-    return json;
-  } catch (error) {
-    throw new Error(error.message || "Something went wrong");
-  }
-};
-
-
-export const updateAccountDetails = async (data) => {
-  try {
-    const res = await fetch(`${API_URL}/auth/update-account`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-      credentials: "include",
-      body: JSON.stringify(data), // e.g., { username, email, bio }
-    });
-
-    const json = await res.json();
-    if (!res.ok) throw new Error(json.message || "Account update failed");
-    return json;
-  } catch (error) {
-    throw new Error(error.message || "Something went wrong");
-  }
-};
-
-
-export const updateUserAvatar = async (avatarFile) => {
-  try {
-    const formData = new FormData();
+  if (avatarFile) {
     formData.append("avatar", avatarFile);
-
-    const res = await fetch(`${API_URL}/auth/avatar`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-      credentials: "include",
-      body: formData,
-    });
-
-    const json = await res.json();
-    if (!res.ok) throw new Error(json.message || "Avatar update failed");
-    return json;
-  } catch (error) {
-    throw new Error(error.message || "Something went wrong");
   }
+  if (coverImageFile) {
+    formData.append("coverImage", coverImageFile);
+  }
+
+  const response = await API.post("/users/register", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return response.data;
 };
 
 
-export const updateUserCoverImage = async (coverFile) => {
-  try {
-    const formData = new FormData();
-    formData.append("coverImage", coverFile);
-
-    const res = await fetch(`${API_URL}/auth/cover-image`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-      credentials: "include",
-      body: formData,
-    });
-
-    const json = await res.json();
-    if (!res.ok) throw new Error(json.message || "Cover image update failed");
-    return json;
-  } catch (error) {
-    throw new Error(error.message || "Something went wrong");
-  }
+// Log in a user
+export const loginUser = async (formData) => {
+  const response = await API.post("/users/login", formData);
+  return response.data;
 };
 
-
-
-export const getUserChannelProfile = async (username) => {
-  try {
-    const res = await fetch(`${API_URL}/auth/c/${username}`, {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-    });
-
-    const json = await res.json();
-    if (!res.ok) throw new Error(json.message || "Failed to load channel");
-    return json;
-  } catch (error) {
-    throw new Error(error.message || "Something went wrong");
-  }
+// Log out the user
+export const logoutUser = async () => {
+  const response = await API.post("/users/logout");
+  return response.data;
 };
 
-
-export const getWatchHistory = async () => {
-  try {
-    const res = await fetch(`${API_URL}/auth/history`, {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-    });
-
-    const json = await res.json();
-    if (!res.ok) throw new Error(json.message || "Failed to fetch watch history");
-    return json;
-  } catch (error) {
-    throw new Error(error.message || "Something went wrong");
-  }
+// Get current logged-in user
+export const getCurrentUser = async () => {
+  const response = await API.get("/users/current-user");
+  return response.data;
 };
-

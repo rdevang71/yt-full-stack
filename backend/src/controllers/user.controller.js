@@ -41,13 +41,10 @@ const registerUser = asyncHandler(async (req, res) => {
   // {
   //       throw new apiError(400,"Full Name is required !! !")
   // }
-  if (
-    [username, email, fullName, password].some((field) => {
-      field?.trim() === "";
-    })
-  ) {
-    throw new apiError(400, "All Fields Are Required!!");
-  }
+if ([username, email, fullName, password].some(field => field?.trim() === "")) {
+  throw new apiError(400, "All Fields Are Required!!");
+}
+
   // check if user already exist : username , email
   const existedUser = await User.findOne({
     $or: [{ username }, { email }],
@@ -57,8 +54,8 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
   // check for images : for avtar and coverimage
-  const avatarLocalPath = req.files?.avatar[0]?.path;
-  const coverImageLocalPath = req.files?.coverImage[0]?.path;
+  const avatarLocalPath = req.files?.avatar?.[0].path ;
+  const coverImageLocalPath = req.files?.coverImage?.[0].path;
 
   if (!avatarLocalPath) {
     throw new apiError(400, "Avatar image needed");
@@ -68,8 +65,8 @@ const registerUser = asyncHandler(async (req, res) => {
   const avatar = await uploadOnCloudinary(avatarLocalPath);
   const coverImage = await uploadOnCloudinary(coverImageLocalPath);
 
-  if (!avatarLocalPath) {
-    throw new apiError(400, "Avatar image needed");
+  if (!avatar?.url) {
+    throw new apiError(400, "Failed to upload avatar to cloudinary");
   }
 
   // create user object - create entry in db

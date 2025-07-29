@@ -5,7 +5,7 @@ import cors from "cors";
 const app = express()
 
 app.use(cors({
-    origin: process.env.CORS_ORIGIN,
+    origin: "http://localhost:3000",
     credentials: true,
 }))
 
@@ -27,6 +27,8 @@ import commentRouter from "./routes/comments.routes.js"
 import tweetRouter from "./routes/tweets.routes.js"
 import playlistRouter from "./routes/playlist.routes.js"
 import dashboardRouter from "./routes/dashboard.routes.js"
+
+
 
 //routes declaration
 app.use("/api/v1/users", userRouter)
