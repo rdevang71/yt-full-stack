@@ -44,8 +44,19 @@ export const loginUser = async (formData) => {
 
 // Log out the user
 export const logoutUser = async () => {
-  const response = await API.post("/users/logout");
-  return response.data;
+  try {
+    const response = await API.post(
+      '/users/logout',
+      {},
+      {
+        withCredentials: true, // Ensure cookies (e.g., JWT) are sent
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Logout API error:", error);
+    throw error;
+  }
 };
 
 // Get current logged-in user

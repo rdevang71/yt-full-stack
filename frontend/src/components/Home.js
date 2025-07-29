@@ -4,7 +4,7 @@ function Home() {
   return (
     <div style={styles.container}>
       <h1>Welcome to MyApp</h1>
-      <p>This is the home page. Use the buttons in the top right to login or register.</p>
+      <p>This is the home page. Use the buttons above to login or register.</p>
     </div>
   );
 }
@@ -17,3 +17,4 @@ const styles = {
 };
 
 export default Home;
+

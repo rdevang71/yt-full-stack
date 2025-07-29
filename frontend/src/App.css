@@ -39,7 +39,10 @@
   color: #61dafb;
 }
 
-/* Navbar core style */
+/* ========================== */
+/* ===== Navbar Styling ===== */
+/* ========================== */
+
 .navbar {
   position: sticky;
   top: 0;
@@ -49,23 +52,50 @@
   justify-content: space-between;
   align-items: center;
   overflow: hidden;
+  transition: background 0.6s ease-in-out;
 }
 
-/* Themed navbar gradients */
+/* Themed navbar gradients (fallback) */
 .home-theme {
   background: linear-gradient(to right, #a18cd1, #fbc2eb);
 }
-
 .register-theme {
   background: linear-gradient(to right, #8aabd2ff, #0646a1ff);
 }
-
 .login-theme {
   background: linear-gradient(to right, #86cdbbff, #1dd1a1);
 }
 
-/* Navbar left section (logo + links) */
+/* Navbar background animation layer */
+.navbar::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: -1;
+  transition: opacity 1.5s ease-in-out;
+  opacity: 1;
+}
+
+.navbar.home-theme::before {
+  background: linear-gradient(to right, #a18cd1, #fbc2eb);
+}
+.navbar.login-theme::before {
+  background: linear-gradient(to right, #86cdbbff, #1dd1a1);
+}
+.navbar.register-theme::before {
+  background: linear-gradient(to right, #8aabd2ff, #0646a1ff);
+}
+
+/* Left section: Logo + Buttons */
 .left-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Optional right section for auth */
+.right-section {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -90,6 +120,8 @@
   backdrop-filter: blur(4px);
   transition: all 0.3s ease;
   box-shadow: 0 0 0 transparent;
+  border: none;
+  cursor: pointer;
 }
 
 .nav-btn:hover {
@@ -98,26 +130,7 @@
   box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
 }
 
-
-.navbar::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  z-index: -1;
-  transition: opacity 2.0s ease-in-out;
-  opacity: 1;
-}
-
-/* Themes */
-.navbar.home-theme::before {
-  background: linear-gradient(to right, #a18cd1, #fbc2eb);
-}
-
-.navbar.login-theme::before {
-  background: linear-gradient(to right, #86cdbbff, #1dd1a1);
-}
-
-.navbar.register-theme::before {
-  background: linear-gradient(to right, #8aabd2ff, #0646a1ff);
+/* Logout button specific style (subtle red tint) */
+.nav-btn.logout {
+  background-color: rgba(255, 80, 80, 0.25);
 }

@@ -1,37 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import "../App.css";
+// src/components/navbar.js
+import React from 'react';
+import { Link } from 'react-router-dom';
+import Logout from './Logout';
 
-function Navbar() {
-  const location = useLocation();
-  const [themeClass, setThemeClass] = useState('navbar home-theme');
-
-  useEffect(() => {
-    // Get theme class based on pathname
-    let newTheme = 'home-theme';
-    if (location.pathname === '/login') newTheme = 'login-theme';
-    else if (location.pathname === '/register') newTheme = 'register-theme';
-
-    // Use slight delay to allow transition
-    const timeout = setTimeout(() => {
-      setThemeClass(`navbar ${newTheme}`);
-    }, 50); // delay needed to trigger CSS transition
-
-    return () => clearTimeout(timeout);
-  }, [location.pathname]);
+function Navbar({ isLoggedIn, setIsLoggedIn, currentPath }) {
+  
+  // Determine theme class based on route
+  const getThemeClass = () => {
+    if (currentPath === '/register') return 'register-theme';
+    if (currentPath === '/login') return 'login-theme';
+    return 'home-theme';
+  };
 
   return (
-    <nav className={themeClass}>
+    <nav className={`navbar ${getThemeClass()}`}>
       <div className="left-section">
-        <Link to="/" className="nav-btn">
-          Home
-        </Link>
-        <h2 className="logo">MyApp</h2>
+        <h1 className="logo">MyApp</h1>
       </div>
-      <div>
-        <Link to="/register" className="nav-btn">
-          Register / Login
-        </Link>
+      <div className="right-section">
+        {isLoggedIn ? (
+          <Logout setIsLoggedIn={setIsLoggedIn} />
+        ) : (
+          <>
+            <Link to="/register" className="nav-btn">Register</Link>
+            <Link to="/login" className="nav-btn">Login</Link>
+          </>
+        )}
       </div>
     </nav>
   );
