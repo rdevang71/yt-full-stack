@@ -1,12 +1,10 @@
 // src/App.js
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Navbar from './components/navbar.js';
-import Home from './components/Home';
-import Register from './components/Register';
-import Login from './components/Login';
-import './App.css';
-
+import Navbar from './components/Navbar.js';
+import Home from './components/Home.js';
+import Register from './components/Register.js';
+import Login from './components/Login.js';
 
 function App() {
   return (

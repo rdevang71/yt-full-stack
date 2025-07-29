@@ -11,3 +11,21 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.nav-btn {
+  text-decoration: none;
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 500;
+  backdrop-filter: blur(4px);
+  transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+  display: inline-block;
+}
+
+.nav-btn:hover {
+  background-color: rgba(255, 255, 255, 0.35);
+  transform: scale(1.07);
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.3);
+}
