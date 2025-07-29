@@ -1,14 +1,14 @@
 // src/components/Logout.js
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { logoutUser } from '../api/auth.js'; // Centralized API method
+import { logoutUser } from '../../api/auth.js'; // Centralized API method
 
 function Logout({ setIsLoggedIn }) {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      // Call backend logout endpoint
+      
       await logoutUser();
 
       // Clear client-side session state

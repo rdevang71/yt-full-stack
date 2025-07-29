@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { registerUser, loginUser } from "../api/auth.js";
+import { registerUser, loginUser } from "../../api/auth.js";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -27,7 +27,6 @@ const Register = () => {
         coverImageFile: formData.coverImage,
       });
 
-      // Auto login after registration
       await loginUser({ email: formData.email, password: formData.password });
       localStorage.setItem("isLoggedIn", "true");
       alert("Registration & Login successful! 🎉");
@@ -61,12 +60,24 @@ const Register = () => {
           <input type="password" name="password" className="form-control mb-3" placeholder="Password" onChange={handleChange} required />
           <input type="file" name="avatar" className="form-control mb-3" accept="image/*" onChange={handleChange} required />
           <input type="file" name="coverImage" className="form-control mb-4" accept="image/*" onChange={handleChange} />
-          <button type="submit" className="btn btn-primary w-100" style={{ fontWeight: "bold", borderRadius: "10px" }}>
+          <button
+            type="submit"
+            className="btn w-100 animated-btn"
+            style={{
+              fontWeight: "bold",
+              borderRadius: "10px",
+              background: "#6c5ce7",
+              color: "white",
+            }}
+          >
             Register
           </button>
         </form>
         <p className="text-center mt-4">
-          Already a user? <a href="/login" style={{ color: "#6c5ce7", fontWeight: "bold" }}>Login here</a>
+          Already a user?{" "}
+          <a href="/login" style={{ color: "#6c5ce7", fontWeight: "bold" }}>
+            Login here
+          </a>
         </p>
       </div>
     </div>

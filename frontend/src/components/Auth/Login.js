@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { loginUser } from "../api/auth.js";
+import { loginUser } from "../../api/auth.js";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -15,7 +15,7 @@ const Login = () => {
       console.log("Login success:", res.data);
       localStorage.setItem("isLoggedIn", "true");
       alert("Logged in successfully! ✅");
-      window.location.href = "/"; // or use navigate from react-router-dom
+      window.location.href = "/";
     } catch (error) {
       alert("Login failed: " + (error.response?.data?.message || "Server error"));
     }
@@ -27,9 +27,8 @@ const Login = () => {
         minHeight: "100vh",
         background: "linear-gradient(135deg, #48dbfb, #1dd1a1, #10ac84)",
         padding: "20px",
-        animation: "fadeIn 1s ease-in-out",
       }}>
-      <div className="card shadow-lg p-5 animate__animated animate__fadeInUp"
+      <div className="card shadow-lg p-5"
         style={{
           width: "100%",
           maxWidth: "500px",
@@ -42,27 +41,24 @@ const Login = () => {
         <form onSubmit={handleSubmit}>
           <input type="email" name="email" className="form-control mb-3" placeholder="Email" onChange={handleChange} required />
           <input type="password" name="password" className="form-control mb-4" placeholder="Password" onChange={handleChange} required />
-          <button type="submit" className="btn w-100"
+          <button
+            type="submit"
+            className="btn w-100 animated-btn"
             style={{
               fontWeight: "bold",
               borderRadius: "12px",
               background: "linear-gradient(to right, #10ac84, #1dd1a1)",
               color: "white",
-              transition: "transform 0.3s ease, box-shadow 0.3s ease",
             }}
-            onMouseEnter={(e) => {
-              e.target.style.transform = "translateY(-2px)";
-              e.target.style.boxShadow = "0 8px 15px rgba(16, 172, 132, 0.3)";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.transform = "translateY(0)";
-              e.target.style.boxShadow = "none";
-            }}>
+          >
             Login
           </button>
         </form>
         <p className="text-center mt-4">
-          Don’t have an account? <a href="/register" style={{ color: "#1dd1a1", fontWeight: "bold" }}>Register here</a>
+          Don’t have an account?{" "}
+          <a href="/register" style={{ color: "#1dd1a1", fontWeight: "bold" }}>
+            Register here
+          </a>
         </p>
       </div>
     </div>

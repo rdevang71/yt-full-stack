@@ -64,3 +64,10 @@ export const getCurrentUser = async () => {
   const response = await API.get("/users/current-user");
   return response.data;
 };
+
+
+// src/api/tokenUtils.js or inside auth.js
+
+export const getToken = () => {
+  return localStorage.getItem("token");
+};
