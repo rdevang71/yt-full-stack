@@ -36,16 +36,9 @@ const registerUser = asyncHandler(async (req, res) => {
   //get user details from frontend
   const { username, email, fullName, password } = req.body;
 
-  //add validation check
-  // if(fullName==="")
-  // {
-  //       throw new apiError(400,"Full Name is required !! !")
-  // }
 if ([username, email, fullName, password].some(field => field?.trim() === "")) {
   throw new apiError(400, "All Fields Are Required!!");
 }
-
-  // check if user already exist : username , email
   const existedUser = await User.findOne({
     $or: [{ username }, { email }],
   });

@@ -12,7 +12,7 @@ import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.route("/videos").get(verifyJWT, getAllVideos);
+router.route("/videos").get( getAllVideos);
 
 router.route("/publish-video").post(
   verifyJWT,

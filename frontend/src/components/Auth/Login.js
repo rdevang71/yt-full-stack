@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { loginUser } from "../../api/auth.js";
 
 const Login = () => {
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState({
+    email: "",
+    username: "",
+    password: ""
+  });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -10,6 +14,12 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.email && !formData.username) {
+      alert("Please enter either username or email.");
+      return;
+    }
+
     try {
       const res = await loginUser(formData);
       console.log("Login success:", res.data);
@@ -39,8 +49,31 @@ const Login = () => {
           Welcome Back
         </h2>
         <form onSubmit={handleSubmit}>
-          <input type="email" name="email" className="form-control mb-3" placeholder="Email" onChange={handleChange} required />
-          <input type="password" name="password" className="form-control mb-4" placeholder="Password" onChange={handleChange} required />
+          <input
+            type="email"
+            name="email"
+            className="form-control mb-3"
+            placeholder="Enter Your Email "
+            onChange={handleChange}
+            value={formData.email}
+          />
+          <input
+            type="text"
+            name="username"
+            className="form-control mb-3"
+            placeholder="Enter Your Username "
+            onChange={handleChange}
+            value={formData.username}
+          />
+          <input
+            type="password"
+            name="password"
+            className="form-control mb-4"
+            placeholder="Password"
+            onChange={handleChange}
+            value={formData.password}
+            required
+          />
           <button
             type="submit"
             className="btn w-100 animated-btn"
