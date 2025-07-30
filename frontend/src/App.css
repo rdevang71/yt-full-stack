@@ -134,3 +134,21 @@
 .nav-btn.logout {
   background-color: rgba(255, 80, 80, 0.25);
 }
+
+/* App.css */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Main content wrapper */
+.main-content {
+  flex: 1;
+  padding-bottom: 80px; /* Reserve space for bottom navbar */
+}
