@@ -7,20 +7,22 @@ import Register from "./components/Auth/Register.js";
 import Profile from "./components/Navbar/profile.js";
 import Login from "./components/Auth/Login.js";
 import "./App.css";
-import { getCurrentUser } from "./api/auth.js"; // assuming this is where auth.js is
+import { getCurrentUser } from "./api/auth.js";
 
 function App() {
   const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null); // ⭐️ Store user info including avatar
 
-  // Sync login state with backend on initial load
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        await getCurrentUser();
+        const res = await getCurrentUser();
         setIsLoggedIn(true);
+        setUser(res.data.user); // ⭐️ Store user data
       } catch {
         setIsLoggedIn(false);
+        setUser(null); // Clear user on failure
       }
     };
 
@@ -32,7 +34,7 @@ function App() {
       <Navbar
         isLoggedIn={isLoggedIn}
         setIsLoggedIn={setIsLoggedIn}
-        currentPath={location.pathname}
+        user={user} // ⭐️ Pass user to Navbar
       />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -44,7 +46,6 @@ function App() {
           path="/login"
           element={<Login setIsLoggedIn={setIsLoggedIn} />}
         />
-        import Profile from './components/Profile';
         <Route
           path="/profile"
           element={<Profile setIsLoggedIn={setIsLoggedIn} />}
