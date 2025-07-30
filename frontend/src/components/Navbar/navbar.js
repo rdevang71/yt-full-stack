@@ -13,10 +13,10 @@ const Navbar = ({ isLoggedIn, user }) => {
 
   useEffect(() => {
     const routeBackgroundMap = {
-      "/": "linear-gradient(90deg, #9e95d8ff, #90257bff)",
+      "/": "linear-gradient(90deg, #1e1e1e, #3c3c3c)",
       "/login": "linear-gradient(90deg, #a2ebd9ff, #1dd1a1)",
       "/register": "linear-gradient(90deg,#97becaff, #32439bff)",
-      "/profile": "linear-gradient(90deg, #e8f5e9, #ffffff)",
+      "/profile": "linear-gradient(90deg, #1e1e1e, #3c3c3c)",
     };
 
     const newGradient =
@@ -48,46 +48,19 @@ const Navbar = ({ isLoggedIn, user }) => {
         transition: "background 0.6s ease-in-out",
       }}
     >
-      {showHomeButton && (
-        <Link
-          to="/"
-          className="text-center"
-          style={{
-            color: "#fff",
-            textDecoration: "none",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            transition: "all 0.4s ease",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = "scale(1.05)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = "scale(1)";
-          }}
-        >
-          <i
-            className="fas fa-home"
-            style={{
-              fontSize: "22px",
-              color: "#fff",
-              transition: "color 0.3s ease",
-            }}
-          ></i>
-          <div style={{ fontSize: "12px", marginTop: "4px", fontWeight: 500 }}>
-            Home
-          </div>
-        </Link>
-      )}
+      <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+        <h4 className="logo animated-logo" style={{ cursor: "pointer" }}>
+          🎬 DTube
+        </h4>
+      </Link>
 
       <div className="d-flex align-items-center gap-3">
         {!isLoggedIn ? (
           <>
-            <Link to="/login" className="btn btn-outline-primary">
+            <Link to="/login" className="btn btn-outline-primary text-white">
               Login
             </Link>
-            <Link to="/register" className="btn btn-outline-primary">
+            <Link to="/register" className="btn btn-outline-primary text-white">
               Register
             </Link>
           </>

@@ -1,11 +1,13 @@
 // src/components/Profile.js
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // 👈 Added for navigation
 import { getCurrentUser } from "../../api/user";
-import Logout from "../Auth/Logout.js";
+import { logoutUser } from "../../api/auth"; // 👈 Directly use logout API
 import "./profile.css";
 
 function Profile({ setIsLoggedIn }) {
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -19,6 +21,18 @@ function Profile({ setIsLoggedIn }) {
     };
     fetchProfile();
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      localStorage.removeItem("isLoggedIn");
+      setIsLoggedIn?.(false);
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout failed:", error?.response?.data || error.message);
+      alert("Logout failed. Please try again.");
+    }
+  };
 
   if (!user) return <div className="text-center mt-5">Loading...</div>;
 
@@ -88,7 +102,6 @@ function Profile({ setIsLoggedIn }) {
 
         {/* Info Section */}
         <div style={{ paddingTop: "80px", padding: "1.5rem" }}>
-          {/* Moved name and join date here so they show below avatar */}
           <div className="text-center mb-3 mt-5">
             <h3 style={{ color: "#6c5ce7", fontWeight: "bold" }}>
               {user.fullName}
@@ -97,28 +110,71 @@ function Profile({ setIsLoggedIn }) {
               Member since {formattedDate}
             </p>
           </div>
-
-          <div style={{ fontSize: "16px" }}>
-            <p>
-              <strong>Username:</strong> {user.username}
+          <div
+            style={{
+              fontSize: "17px",
+              backgroundColor: "#f9f9f9",
+              padding: "20px",
+              borderRadius: "12px",
+              boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+              color: "#333",
+              lineHeight: "1.6",
+              maxWidth: "600px",
+              margin: "0 auto",
+            }}
+          >
+            <p style={{ marginBottom: "12px" }}>
+              <strong style={{ color: "#000" }}>👤 Username:</strong>{" "}
+              <span style={{ color: "#333" }}>{user.username}</span>
             </p>
-            <p>
-              <strong>Email:</strong> {user.email}
+            <p style={{ marginBottom: "12px" }}>
+              <strong style={{ color: "#000" }}>📧 Email:</strong>{" "}
+              <span style={{ color: "#333" }}>{user.email}</span>
             </p>
             {user.bio && (
-              <p>
-                <strong>Bio:</strong> {user.bio}
+              <p style={{ marginBottom: "12px" }}>
+                <strong style={{ color: "#000" }}>📝 Bio:</strong>{" "}
+                <span style={{ color: "#333" }}>{user.bio}</span>
               </p>
             )}
             {user.location && (
-              <p>
-                <strong>Location:</strong> {user.location}
+              <p style={{ marginBottom: "0" }}>
+                <strong style={{ color: "#000" }}>📍 Location:</strong>{" "}
+                <span style={{ color: "#333" }}>{user.location}</span>
               </p>
             )}
           </div>
 
           <div className="mt-4 text-center">
-            <Logout setIsLoggedIn={setIsLoggedIn} />
+            <button
+              onClick={handleLogout}
+              style={{
+                background: "linear-gradient(135deg, #242323ff, #242423ff)",
+                color: "#fff",
+                border: "none",
+                padding: "12px 28px",
+                borderRadius: "30px",
+                fontSize: "1rem",
+                fontWeight: "600",
+                cursor: "pointer",
+                boxShadow: "0 4px 15px rgba(255, 78, 80, 0.4)",
+                transition: "all 0.3s ease-in-out",
+                position: "relative",
+                overflow: "hidden",
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.transform = "scale(1.05)";
+                e.currentTarget.style.boxShadow =
+                  "0 6px 20px rgba(67, 62, 62, 0.6)";
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.boxShadow =
+                  "0 4px 15px rgba(53, 49, 49, 0.4)";
+              }}
+            >
+              🚪 Logout
+            </button>
           </div>
         </div>
       </div>

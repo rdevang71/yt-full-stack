@@ -5,7 +5,7 @@ const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     username: "",
-    password: ""
+    password: "",
   });
 
   const handleChange = (e) => {
@@ -27,25 +27,34 @@ const Login = () => {
       alert("Logged in successfully! ✅");
       window.location.href = "/";
     } catch (error) {
-      alert("Login failed: " + (error.response?.data?.message || "Server error"));
+      alert(
+        "Login failed: " + (error.response?.data?.message || "Server error")
+      );
     }
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center"
+    <div
+      className="d-flex justify-content-center align-items-center"
       style={{
         minHeight: "100vh",
         background: "linear-gradient(135deg, #48dbfb, #1dd1a1, #10ac84)",
         padding: "20px",
-      }}>
-      <div className="card shadow-lg p-5"
+      }}
+    >
+      <div
+        className="card shadow-lg p-5"
         style={{
           width: "100%",
           maxWidth: "500px",
           borderRadius: "20px",
           background: "rgba(255, 255, 255, 0.97)",
-        }}>
-        <h2 className="text-center mb-4" style={{ fontWeight: "bold", color: "#1dd1a1" }}>
+        }}
+      >
+        <h2
+          className="text-center mb-4"
+          style={{ fontWeight: "bold", color: "#1dd1a1" }}
+        >
           Welcome Back
         </h2>
         <form onSubmit={handleSubmit}>
@@ -57,6 +66,12 @@ const Login = () => {
             onChange={handleChange}
             value={formData.email}
           />
+          <p
+            className="text-center mt-4"
+            style={{ color: "#333", fontWeight: "700", fontSize: "1rem" }}
+          >
+            OR{" "}
+          </p>
           <input
             type="text"
             name="username"
@@ -87,7 +102,10 @@ const Login = () => {
             Login
           </button>
         </form>
-        <p className="text-center mt-4">
+        <p
+          className="text-center mt-4"
+          style={{ color: "#333", fontWeight: "400", fontSize: "1rem" }}
+        >
           Don’t have an account?{" "}
           <a href="/register" style={{ color: "#1dd1a1", fontWeight: "bold" }}>
             Register here
