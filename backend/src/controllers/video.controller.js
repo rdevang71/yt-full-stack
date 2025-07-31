@@ -5,6 +5,7 @@ import { apiError } from "../utils/apiErrors.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { getVideoDurationInSeconds } from "get-video-duration";
 
 const getAllVideos = asyncHandler(async (req, res) => {
   const page = parseInt(req.query.page) || 1;
@@ -43,14 +44,17 @@ const publishAVideo = asyncHandler(async (req, res) => {
     throw new apiError(400, "Title and description are required");
   }
 
-  const thumbnailLocalPath = req.files?.thumbnail[0]?.path;
+  const thumbnailLocalPath = req.files?.thumbnail?.[0]?.path;
   const videoLocalPath = req.files?.video?.[0]?.path;
+
   if (!thumbnailLocalPath) {
     throw new apiError(400, "Thumbnail image needed");
   }
   if (!videoLocalPath) {
     throw new apiError(400, "Video file needed");
   }
+
+  const duration = await getVideoDurationInSeconds(videoLocalPath);
 
   const thumbnail = await uploadOnCloudinary(thumbnailLocalPath);
   const uploadedVideo = await uploadOnCloudinary(videoLocalPath);
@@ -60,6 +64,7 @@ const publishAVideo = asyncHandler(async (req, res) => {
     description,
     thumbnail: thumbnail?.secure_url,
     videoFile: uploadedVideo.secure_url,
+    duration, // ⏱️ Save extracted duration
     owner: req.user?._id,
   });
 
@@ -71,11 +76,10 @@ const publishAVideo = asyncHandler(async (req, res) => {
   if (!publishedVideo) {
     throw new apiError(500, "Something went wrong while Publishing The Video");
   }
+
   return res
     .status(201)
-    .json(
-      new apiResponse(200, publishedVideo, "Video Published  Successfully")
-    );
+    .json(new apiResponse(200, publishedVideo, "Video Published Successfully"));
 });
 
 const getVideoById = asyncHandler(async (req, res) => {

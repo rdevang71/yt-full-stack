@@ -4,16 +4,14 @@ const VideoCard = ({ video }) => {
   return (
     <div className="container-fluid px-0" style={{ marginBottom: "1.8rem" }}>
       <div
-        className="d-flex flex-row align-items-stretch shadow-sm"
+        className="d-flex flex-column shadow-sm"
         style={{
           width: "100%",
           backgroundColor: "#000",
           borderRadius: "18px",
           overflow: "hidden",
-          minHeight: "200px",
-          
-          color: "#fff",
           transition: "transform 0.3s ease, box-shadow 0.3s ease",
+          color: "#fff",
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = "scale(1.02)";
@@ -24,8 +22,15 @@ const VideoCard = ({ video }) => {
           e.currentTarget.style.boxShadow = "none";
         }}
       >
-        {/* Thumbnail */}
-        <div style={{ flex: "0 0 300px" }}>
+        {/* Thumbnail on top */}
+        <div
+          style={{
+            position: "relative",
+            width: "100%",
+            height: "180px",
+            overflow: "hidden",
+          }}
+        >
           <img
             src={
               video.thumbnail ||
@@ -38,11 +43,28 @@ const VideoCard = ({ video }) => {
               objectFit: "cover",
             }}
           />
+
+          {/* Duration Overlay */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: "8px",
+              right: "8px",
+              backgroundColor: "rgba(0, 0, 0, 0.75)",
+              color: "#fff",
+              fontSize: "0.8rem",
+              fontWeight: "bold",
+              padding: "2px 6px",
+              borderRadius: "4px",
+            }}
+          >
+            {formatDuration(video.duration)}
+          </div>
         </div>
 
-        {/* Info Section */}
+        {/* Info Section below */}
         <div
-          className="p-4 d-flex flex-column justify-content-between"
+          className="p-3 d-flex flex-column justify-content-between"
           style={{ flex: 1 }}
         >
           <div>
@@ -51,19 +73,23 @@ const VideoCard = ({ video }) => {
               className="mb-2"
               style={{
                 color: "#ffffff",
-                fontSize: "1.5rem",
+                fontSize: "1.3rem",
                 fontWeight: "bold",
                 lineHeight: "1.3",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
               }}
+              title={video.title}
             >
               {video.title}
             </h3>
 
             {/* Truncated Description */}
             <p
-              className="mb-3"
+              className="mb-2"
               style={{
-                fontSize: "1rem",
+                fontSize: "0.95rem",
                 color: "#cccccc",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
@@ -78,7 +104,7 @@ const VideoCard = ({ video }) => {
             <p
               className="mb-1"
               style={{
-                fontSize: "1rem",
+                fontSize: "0.95rem",
                 color: "#eeeeee",
               }}
             >
@@ -87,7 +113,7 @@ const VideoCard = ({ video }) => {
             <p
               className="mb-0"
               style={{
-                fontSize: "0.9rem",
+                fontSize: "0.85rem",
                 color: "#bbbbbb",
               }}
             >

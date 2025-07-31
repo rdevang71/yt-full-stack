@@ -35,7 +35,14 @@ const Home = () => {
       {loading ? (
         <p className="text-center">Loading videos...</p>
       ) : (
-        <div className="d-flex flex-column gap-4">
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+            gap: "2rem",
+            padding: "1rem",
+          }}
+        >
           {videos.map((video) => (
             <VideoCard key={video._id} video={video} />
           ))}
