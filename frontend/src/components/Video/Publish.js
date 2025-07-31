@@ -25,7 +25,7 @@ const Publish = () => {
 
     try {
       setLoading(true);
-      const res = await axios.post("/api/publish-video", formData, {
+      const res = await axios.post("http://localhost:8000/api/v1/videos/publish-video", formData, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
       });
