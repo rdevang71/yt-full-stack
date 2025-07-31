@@ -1,4 +1,3 @@
-// src/components/Navbar/navbar.js
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./navbar.css";
@@ -12,12 +11,13 @@ const Navbar = ({ isLoggedIn, user }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const routeBackgroundMap = {
-      "/": "linear-gradient(90deg, #1e1e1e, #3c3c3c)",
-      "/login": "linear-gradient(90deg, #a2ebd9ff, #1dd1a1)",
-      "/register": "linear-gradient(90deg,#97becaff, #32439bff)",
-      "/profile": "linear-gradient(90deg, #1e1e1e, #3c3c3c)",
-    };
+   const routeBackgroundMap = {
+  "/": "linear-gradient(90deg, #000, #000)",
+  "/login": "linear-gradient(90deg, #a2ebd9ff, #1dd1a1)",
+  "/register": "linear-gradient(90deg,#97becaff, #32439bff)",
+  "/profile": "linear-gradient(90deg, #000, #000)",
+  "/publish": "linear-gradient(90deg, #000, #000)",
+};
 
     const newGradient =
       routeBackgroundMap[location.pathname] ||
@@ -43,10 +43,16 @@ const Navbar = ({ isLoggedIn, user }) => {
   return (
     <nav
       className="navbar d-flex justify-content-between align-items-center px-4 py-2"
-      style={{
-        background: backgroundGradient,
-        transition: "background 0.6s ease-in-out",
-      }}
+       style={{
+    position: "fixed",          // Keeps it fixed on scroll
+    top: 0,
+    left: 0,
+    width: "100%",
+    zIndex: 1000,               // Ensure it stays on top of other elements
+    background: backgroundGradient,
+    transition: "background 0.6s ease-in-out",
+  }}
+
     >
       <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
         <h4 className="logo animated-logo" style={{ cursor: "pointer" }}>
@@ -66,6 +72,48 @@ const Navbar = ({ isLoggedIn, user }) => {
           </>
         ) : (
           <>
+            {showHomeButton && (
+  <Link
+    to="/publish"
+    className="d-flex align-items-center gap-2"
+    style={{
+      fontWeight: "500",
+      borderRadius: "8px",
+      padding: "6px 12px",
+      backgroundColor: "#2a2d2bff",
+      color: "#ffffff",
+      textDecoration: "none",
+      transition: "background 0.3s ease",
+    }}
+    onMouseEnter={(e) => {
+      const link = e.currentTarget;
+      const icon = link.querySelector("span");
+      link.style.backgroundColor = "#1b1f1cff";
+      if (icon) icon.style.backgroundColor = "#1b1f1cff";
+    }}
+    onMouseLeave={(e) => {
+      const link = e.currentTarget;
+      const icon = link.querySelector("span");
+      link.style.backgroundColor = "#2a2d2bff";
+      if (icon) icon.style.backgroundColor = "#2a2d2bff";
+    }}
+  >
+    <span
+      style={{
+        fontSize: "20px",
+        color: "#ffffff",
+        backgroundColor: "#2a2d2bff",
+        borderRadius: "4px",
+        padding: "2px 6px",
+        transition: "background 0.3s ease",
+      }}
+    >
+      ➕
+    </span>
+    Publish
+  </Link>
+)}
+
             <img
               src={
                 user?.avatar && user.avatar.startsWith("http")

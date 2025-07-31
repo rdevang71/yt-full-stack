@@ -7,11 +7,11 @@ const VideoCard = ({ video }) => {
         className="d-flex flex-row align-items-stretch shadow-sm"
         style={{
           width: "100%",
-          backgroundColor: "#1e1e1e",
-          borderRadius: "14px",
+          backgroundColor: "#000",
+          borderRadius: "18px",
           overflow: "hidden",
           minHeight: "200px",
-          border: "1px solid #333",
+          
           color: "#fff",
           transition: "transform 0.3s ease, box-shadow 0.3s ease",
         }}

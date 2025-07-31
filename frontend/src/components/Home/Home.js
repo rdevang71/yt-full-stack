@@ -25,7 +25,7 @@ const Home = () => {
     <div
       className="w-100 px-4 py-4"
       style={{
-        backgroundImage: "linear-gradient(90deg, #1e1e1e, #3c3c3c)",
+        backgroundImage: "linear-gradient(90deg, #000, #000)",
         color: "#ffffff",
         minHeight: "100vh",
         overflowX: "hidden",

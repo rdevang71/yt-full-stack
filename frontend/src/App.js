@@ -9,6 +9,7 @@ import Profile from "./components/Navbar/profile.js";
 import Login from "./components/Auth/Login.js";
 import "./App.css";
 import { getCurrentUser } from "./api/auth.js";
+import Publish from "./components/Video/Publish.js";
 
 function App() {
   const location = useLocation();
@@ -60,6 +61,8 @@ function App() {
               path="/profile"
               element={<Profile setIsLoggedIn={setIsLoggedIn} />}
             />
+            <Route path="/publish" element={<Publish />} />
+
           </Routes>
         </div>
       )}
