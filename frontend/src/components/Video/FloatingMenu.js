@@ -1,4 +1,3 @@
-// src/components/Video/FloatingMenu.js
 import React, { useState, useRef, useEffect } from "react";
 import AddToPlaylistMenu from "./AddToPlaylistMenu";
 
@@ -63,11 +62,14 @@ const FloatingMenu = () => {
           style={dropdownStyle}
           onClick={() => {
             setShowSubmenu(true);
+            setIsOpen(false);
           }}
           onMouseEnter={(e) =>
             (e.currentTarget.style.transform = "scale(1.05)")
           }
-          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          onMouseLeave={(e) =>
+            (e.currentTarget.style.transform = "scale(1)")
+          }
         >
           ➕ Add to Playlist
         </div>
