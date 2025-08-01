@@ -1,6 +1,8 @@
 import React from "react";
+import FloatingMenu from "./FloatingMenu";
 
 const VideoCard = ({ video }) => {
+  
   return (
     <div className="container-fluid px-0" style={{ marginBottom: "1.8rem" }}>
       <div
@@ -12,6 +14,7 @@ const VideoCard = ({ video }) => {
           overflow: "hidden",
           transition: "transform 0.3s ease, box-shadow 0.3s ease",
           color: "#fff",
+          position: "relative",
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = "scale(1.02)";
@@ -120,6 +123,8 @@ const VideoCard = ({ video }) => {
               📅 {new Date(video.createdAt).toLocaleDateString()} • ⏱️{" "}
               {formatDuration(video.duration)}
             </p>
+            <FloatingMenu />
+
           </div>
         </div>
       </div>

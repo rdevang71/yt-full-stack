@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useEffect, useState } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar/navbar.js";
@@ -7,6 +6,7 @@ import Home from "./components/Home/Home.js";
 import Register from "./components/Auth/Register.js";
 import Profile from "./components/Navbar/profile.js";
 import Login from "./components/Auth/Login.js";
+import Playlist from "./components/playlist/playlist.js"; // ✅ Added import
 import "./App.css";
 import { getCurrentUser } from "./api/auth.js";
 import Publish from "./components/Video/Publish.js";
@@ -15,6 +15,7 @@ function App() {
   const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -33,14 +34,20 @@ function App() {
   const hideSidebarRoutes = ["/login", "/register"];
   const isAuthRoute = hideSidebarRoutes.includes(location.pathname);
 
+  const toggleSidebar = () => {
+    setIsSidebarCollapsed((prev) => !prev);
+  };
+
   return (
     <>
       <Navbar
         isLoggedIn={isLoggedIn}
         setIsLoggedIn={setIsLoggedIn}
         user={user}
+        onToggleSidebar={toggleSidebar}
+        isSidebarCollapsed={isSidebarCollapsed}
       />
-      {!isAuthRoute && <Sidebar />}
+      {!isAuthRoute && <Sidebar isCollapsed={isSidebarCollapsed} />}
 
       {isAuthRoute ? (
         <Routes>
@@ -54,7 +61,13 @@ function App() {
           />
         </Routes>
       ) : (
-        <div className="main-wrapper">
+        <div
+          className="main-wrapper"
+          style={{
+            marginLeft: isSidebarCollapsed ? "80px" : "240px",
+            transition: "margin-left 0.3s ease",
+          }}
+        >
           <Routes>
             <Route path="/" element={<Home />} />
             <Route
@@ -62,7 +75,7 @@ function App() {
               element={<Profile setIsLoggedIn={setIsLoggedIn} />}
             />
             <Route path="/publish" element={<Publish />} />
-
+            <Route path="/playlists" element={<Playlist />} /> {/* ✅ Added route */}
           </Routes>
         </div>
       )}
