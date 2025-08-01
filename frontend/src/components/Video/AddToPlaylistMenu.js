@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { API } from "../../api/auth"; // Make sure this includes axios with credentials
 
 const sideMenuStyle = {
   position: "absolute",
@@ -11,7 +12,7 @@ const sideMenuStyle = {
   boxShadow: "0 2px 12px rgba(0,0,0,0.5)",
   fontSize: "0.95rem",
   zIndex: 999,
-  width: "260px",
+  width: "300px",
 };
 
 const inputStyle = {
@@ -34,10 +35,24 @@ const buttonStyle = {
   cursor: "pointer",
 };
 
-const AddToPlaylistMenu = ({ onClose }) => {
+const AddToPlaylistMenu = ({ videoId, onClose }) => {
+  const [playlists, setPlaylists] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [createMode, setCreateMode] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchUserPlaylists = async () => {
+      try {
+        const res = await API.get("/playlist/get-userplaylist");
+        setPlaylists(res.data.data.playlists);
+      } catch (err) {
+        console.error("Failed to load playlists:", err);
+      }
+    };
+    fetchUserPlaylists();
+  }, []);
 
   const handleCreate = async () => {
     if (!name || !description) {
@@ -47,26 +62,40 @@ const AddToPlaylistMenu = ({ onClose }) => {
 
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:8000/api/v1/playlist/create-playlist", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials:"include",
-        body: JSON.stringify({ name, description }),
+      const res = await API.post("/playlist/create-playlist", {
+        name,
+        description,
       });
 
-      const data = await res.json();
-      if (res.ok) {
-        alert("Playlist created successfully!");
-        setName("");
-        setDescription("");
-        onClose();
-      } else {
-        throw new Error(data.message || "Failed to create playlist");
-      }
-    } catch (error) {
-      alert(error.message);
+      const newPlaylist = res.data.data;
+      setPlaylists((prev) => [newPlaylist, ...prev]);
+      setName("");
+      setDescription("");
+      setCreateMode(false);
+      alert("Playlist created!");
+    } catch (err) {
+      console.error(err);
+      alert("Error creating playlist");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAddToPlaylist = async (playlistId) => {
+    if (!videoId || typeof videoId !== "string") {
+      console.error("Invalid or missing videoId:", videoId);
+      alert("Error: Video ID is missing. Cannot add to playlist.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await API.post(`/playlist/add-video/${playlistId}/${videoId}`);
+      alert("Video added to playlist!");
+      onClose();
+    } catch (err) {
+      console.error(err);
+      alert("Failed to add video");
     } finally {
       setLoading(false);
     }
@@ -74,24 +103,71 @@ const AddToPlaylistMenu = ({ onClose }) => {
 
   return (
     <div style={sideMenuStyle} onClick={(e) => e.stopPropagation()}>
-      <strong style={{ marginBottom: "8px", display: "block" }}>
-        ➕ Create New Playlist
-      </strong>
-      <input
-        style={inputStyle}
-        placeholder="Playlist Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <input
-        style={inputStyle}
-        placeholder="Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
-      <button style={buttonStyle} onClick={handleCreate} disabled={loading}>
-        {loading ? "Creating..." : "Create"}
-      </button>
+      {!createMode ? (
+        <>
+          <strong style={{ marginBottom: "8px", display: "block" }}>
+            📂 Select Playlist
+          </strong>
+          {playlists.length === 0 ? (
+            <p>No playlists found.</p>
+          ) : (
+            <ul style={{ listStyle: "none", padding: 0 }}>
+              {playlists.map((p) => (
+                <li key={p._id} style={{ marginBottom: "8px" }}>
+                  <button
+                    style={buttonStyle}
+                    onClick={() => handleAddToPlaylist(p._id)}
+                    disabled={loading}
+                  >
+                    ➕ {p.name}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+          <button
+            style={{ ...buttonStyle, backgroundColor: "#666" }}
+            onClick={() => setCreateMode(true)}
+          >
+            ➕ Create New Playlist
+          </button>
+        </>
+      ) : (
+        <>
+          <strong style={{ marginBottom: "8px", display: "block" }}>
+            🆕 Create Playlist
+          </strong>
+          <input
+            style={inputStyle}
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <input
+            style={inputStyle}
+            placeholder="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+          <button
+            style={buttonStyle}
+            onClick={handleCreate}
+            disabled={loading}
+          >
+            {loading ? "Creating..." : "Create"}
+          </button>
+          <button
+            style={{
+              ...buttonStyle,
+              backgroundColor: "#666",
+              marginTop: "8px",
+            }}
+            onClick={() => setCreateMode(false)}
+          >
+            🔙 Back to Playlist List
+          </button>
+        </>
+      )}
     </div>
   );
 };

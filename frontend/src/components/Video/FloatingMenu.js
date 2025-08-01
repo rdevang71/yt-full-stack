@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import AddToPlaylistMenu from "./AddToPlaylistMenu";
 
-const FloatingMenu = () => {
+const FloatingMenu = ({ videoId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showSubmenu, setShowSubmenu] = useState(false);
   const menuRef = useRef();
@@ -17,33 +17,41 @@ const FloatingMenu = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const handleAddClick = () => {
+    setShowSubmenu(true);
+    setIsOpen(false);
+  };
+
   const wrapperStyle = {
     position: "absolute",
-    bottom: "12px",
-    right: "12px",
-    zIndex: 10,
+    bottom: "16px",
+    right: "16px",
+    zIndex: 100,
   };
+
   const buttonStyle = {
     backgroundColor: "#000",
     color: "#fff",
     fontSize: "1.5rem",
     border: "none",
     borderRadius: "50%",
-    width: "36px",
-    height: "36px",
+    width: "40px",
+    height: "40px",
     cursor: "pointer",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    transition: "transform 0.2s ease",
   };
+
   const dropdownStyle = {
     position: "absolute",
-    bottom: "48px",
+    bottom: "52px",
     right: "0",
     backgroundColor: "#2c2c2e",
     color: "#fff",
     borderRadius: "6px",
-    padding: "8px 12px",
+    padding: "10px 14px",
     boxShadow: "0 2px 12px rgba(0, 0, 0, 0.5)",
     fontSize: "0.95rem",
     cursor: "pointer",
@@ -53,30 +61,29 @@ const FloatingMenu = () => {
 
   return (
     <div style={wrapperStyle} ref={menuRef}>
-      <button style={buttonStyle} onClick={() => setIsOpen(!isOpen)}>
+      <button
+        style={buttonStyle}
+        onClick={() => setIsOpen(!isOpen)}
+        onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
+        onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+        title="More options"
+      >
         ⋮
       </button>
 
       {isOpen && (
         <div
           style={dropdownStyle}
-          onClick={() => {
-            setShowSubmenu(true);
-            setIsOpen(false);
-          }}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.transform = "scale(1.05)")
-          }
-          onMouseLeave={(e) =>
-            (e.currentTarget.style.transform = "scale(1)")
-          }
+          onClick={handleAddClick}
+          onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
         >
           ➕ Add to Playlist
         </div>
       )}
 
-      {showSubmenu && (
-        <AddToPlaylistMenu onClose={() => setShowSubmenu(false)} />
+      {showSubmenu && videoId && (
+        <AddToPlaylistMenu videoId={videoId} onClose={() => setShowSubmenu(false)} />
       )}
     </div>
   );

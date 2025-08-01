@@ -130,10 +130,16 @@ const addVideoToPlaylist = asyncHandler(async (req, res) => {
     throw new apiError(404, "playlist not found");
   }
 
+  if (playlist.videos.includes(videoId)) {
+  return res
+    .status(400)
+    .json(new apiResponse(400, null, "Video already exists in playlist"));
+}
+
   const updatedPlaylist = await Playlist.findByIdAndUpdate(
     playlistId,
     {
-      $push: { video: videoId },
+      $push: { videos: videoId },
     },
     { new: true }
   );
@@ -145,7 +151,7 @@ const addVideoToPlaylist = asyncHandler(async (req, res) => {
     );
   }
 
-  const totalVideosInPlaylist = updatedPlaylist.video.length;
+  const totalVideosInPlaylist = updatedPlaylist.videos.length;
 
   return res
     .status(200)
@@ -185,7 +191,7 @@ const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
     throw new apiError(404, "Playlist not found");
   }
 
-  const videoExists = playlist.video.some((v) => v.toString() === videoId);
+  const videoExists = playlist.videos.some((v) => v.toString() === videoId);
 
   if (!videoExists) {
     throw new apiError(400, "Video not found in the playlist");
@@ -194,7 +200,7 @@ const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
   const updatedPlaylist = await Playlist.findByIdAndUpdate(
     playlistId,
     {
-      $pull: { video: videoId },
+      $pull: { videos: videoId },
     },
     { new: true }
   );

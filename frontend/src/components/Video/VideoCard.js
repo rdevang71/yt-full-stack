@@ -125,7 +125,7 @@ const VideoCard = ({ video }) => {
             
 
           </div>
-          <FloatingMenu />
+          <FloatingMenu videoId={video._id} />
         </div>
       </div>
     </div>
