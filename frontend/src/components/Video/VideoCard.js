@@ -2,7 +2,6 @@ import React from "react";
 import FloatingMenu from "./FloatingMenu";
 
 const VideoCard = ({ video }) => {
-  
   return (
     <div className="container-fluid px-0" style={{ marginBottom: "1.8rem" }}>
       <div
@@ -123,9 +122,10 @@ const VideoCard = ({ video }) => {
               📅 {new Date(video.createdAt).toLocaleDateString()} • ⏱️{" "}
               {formatDuration(video.duration)}
             </p>
-            <FloatingMenu />
+            
 
           </div>
+          <FloatingMenu />
         </div>
       </div>
     </div>

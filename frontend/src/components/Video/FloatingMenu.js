@@ -1,13 +1,17 @@
+// src/components/Video/FloatingMenu.js
 import React, { useState, useRef, useEffect } from "react";
+import AddToPlaylistMenu from "./AddToPlaylistMenu";
 
 const FloatingMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showSubmenu, setShowSubmenu] = useState(false);
   const menuRef = useRef();
 
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
         setIsOpen(false);
+        setShowSubmenu(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -20,7 +24,6 @@ const FloatingMenu = () => {
     right: "12px",
     zIndex: 10,
   };
-
   const buttonStyle = {
     backgroundColor: "#000",
     color: "#fff",
@@ -34,7 +37,6 @@ const FloatingMenu = () => {
     alignItems: "center",
     justifyContent: "center",
   };
-
   const dropdownStyle = {
     position: "absolute",
     bottom: "48px",
@@ -52,11 +54,27 @@ const FloatingMenu = () => {
 
   return (
     <div style={wrapperStyle} ref={menuRef}>
-      <button style={buttonStyle} onClick={() => setIsOpen(!isOpen)}>⋮</button>
+      <button style={buttonStyle} onClick={() => setIsOpen(!isOpen)}>
+        ⋮
+      </button>
+
       {isOpen && (
-        <div style={dropdownStyle}>
-          Add to Playlist
+        <div
+          style={dropdownStyle}
+          onClick={() => {
+            setShowSubmenu(true);
+          }}
+          onMouseEnter={(e) =>
+            (e.currentTarget.style.transform = "scale(1.05)")
+          }
+          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+        >
+          ➕ Add to Playlist
         </div>
+      )}
+
+      {showSubmenu && (
+        <AddToPlaylistMenu onClose={() => setShowSubmenu(false)} />
       )}
     </div>
   );
