@@ -6,11 +6,13 @@ import Home from "./components/Home/Home.js";
 import Register from "./components/Auth/Register.js";
 import Profile from "./components/Navbar/profile.js";
 import Login from "./components/Auth/Login.js";
-import Playlist from "./components/playlist/playlist.js"; // ✅ Added import
+import Playlist from "./components/playlist/playlist.js"; 
 import "./App.css";
 import { getCurrentUser } from "./api/auth.js";
 import Publish from "./components/Video/Publish.js";
-import PlaylistDetails from "./components/playlist/PlaylistDetails.js"; // ✅ Add this
+import PlaylistDetails from "./components/playlist/PlaylistDetails.js"; 
+import Channel from "./components/profile/channel.js"
+
 
 function App() {
   const location = useLocation();
@@ -78,7 +80,7 @@ function App() {
             <Route path="/publish" element={<Publish />} />
             <Route path="/playlists" element={<Playlist />} /> 
             <Route path="/playlist/:playlistId" element={<PlaylistDetails />} />
-
+            <Route path="/channel" element={<Channel />} />
           </Routes>
         </div>
       )}

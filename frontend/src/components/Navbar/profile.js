@@ -32,7 +32,8 @@ function Profile({ setIsLoggedIn }) {
     }
   };
 
-  if (!user) return <div className="text-center mt-5 text-white">Loading...</div>;
+  if (!user)
+    return <div className="text-center mt-5 text-white">Loading...</div>;
 
   const formattedDate = new Date(user.createdAt).toLocaleDateString("en-IN", {
     year: "numeric",
@@ -44,7 +45,7 @@ function Profile({ setIsLoggedIn }) {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#0d0d0d",
+        backgroundColor: "#000",
         color: "#fff",
         padding: "2rem",
         display: "flex",
@@ -56,7 +57,7 @@ function Profile({ setIsLoggedIn }) {
         style={{
           width: "100%",
           maxWidth: "960px",
-          backgroundColor: "#111",
+          backgroundColor: "#000",
           borderRadius: "16px",
           boxShadow: "0 0 20px rgba(0, 0, 0, 0.6)",
           overflow: "hidden",
@@ -113,10 +114,16 @@ function Profile({ setIsLoggedIn }) {
           />
         </div>
 
-        <div style={{ paddingTop: "120px", padding: "2rem" }}>
+        <div style={{ paddingTop: "80px", padding: "2rem" }}>
           {/* Full Name & Join Date */}
           <div className="text-center mb-4">
-            <h2 style={{ color: "#1dd1a1", fontWeight: "bold", marginBottom: "0.5rem" }}>
+            <h2
+              style={{
+                color: "#1dd1a1",
+                fontWeight: "bold",
+                marginBottom: "0.5rem",
+              }}
+            >
               {user.fullName}
             </h2>
             <p style={{ fontStyle: "italic", color: "#ccc" }}>
@@ -127,7 +134,7 @@ function Profile({ setIsLoggedIn }) {
           {/* Profile Details */}
           <div
             style={{
-              backgroundColor: "#1a1a1a",
+              backgroundColor: "#000",
               padding: "1.5rem",
               borderRadius: "12px",
               boxShadow: "0 2px 10px rgba(0,0,0,0.6)",
@@ -138,23 +145,52 @@ function Profile({ setIsLoggedIn }) {
               margin: "0 auto",
             }}
           >
-            <p><strong style={{ color: "#1dd1a1" }}>👤 Username:</strong> {user.username}</p>
-            <p><strong style={{ color: "#1dd1a1" }}>📧 Email:</strong> {user.email}</p>
-            {user.phone && (
-              <p><strong style={{ color: "#1dd1a1" }}>📞 Phone:</strong> {user.phone}</p>
-            )}
-            {user.gender && (
-              <p><strong style={{ color: "#1dd1a1" }}>⚧ Gender:</strong> {user.gender}</p>
-            )}
-            {user.role && (
-              <p><strong style={{ color: "#1dd1a1" }}>🔖 Role:</strong> {user.role}</p>
-            )}
-            {user.bio && (
-              <p><strong style={{ color: "#1dd1a1" }}>📝 Bio:</strong> {user.bio}</p>
-            )}
-            {user.location && (
-              <p><strong style={{ color: "#1dd1a1" }}>📍 Location:</strong> {user.location}</p>
-            )}
+            <p>
+              <strong style={{ color: "#1dd1a1" }}>👤 Username:</strong>{" "}
+              {user.username}
+            </p>
+            <p>
+              <strong style={{ color: "#1dd1a1" }}>📧 Email:</strong>{" "}
+              {user.email}
+            </p>
+          </div>
+
+          <div className="mt-4 text-center">
+            <button
+              onClick={() => navigate("/channel")}
+              style={{
+                background: "linear-gradient(135deg, #1b1b1b, #242424)",
+                color: "#1dd1a1",
+                border: "1px solid #1dd1a1",
+                padding: "12px 30px",
+                borderRadius: "30px",
+                fontSize: "1rem",
+                fontWeight: "600",
+                cursor: "pointer",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.5)",
+                transition: "all 0.3s ease-in-out",
+                marginBottom: "1rem",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.transform = "scale(1.05)";
+                e.currentTarget.style.background =
+                  "linear-gradient(135deg, #242424, #1b1b1b)";
+                e.currentTarget.style.boxShadow =
+                  "0 6px 18px rgba(29, 209, 161, 0.6)";
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.background =
+                  "linear-gradient(135deg, #1b1b1b, #242424)";
+                e.currentTarget.style.boxShadow =
+                  "0 4px 12px rgba(0, 0, 0, 0.5)";
+              }}
+            >
+              🎛️ Go to Your Channel
+            </button>
           </div>
 
           {/* Logout Button */}
@@ -175,11 +211,13 @@ function Profile({ setIsLoggedIn }) {
               }}
               onMouseOver={(e) => {
                 e.currentTarget.style.transform = "scale(1.05)";
-                e.currentTarget.style.boxShadow = "0 6px 20px rgba(29, 209, 161, 0.6)";
+                e.currentTarget.style.boxShadow =
+                  "0 6px 20px rgba(29, 209, 161, 0.6)";
               }}
               onMouseOut={(e) => {
                 e.currentTarget.style.transform = "scale(1)";
-                e.currentTarget.style.boxShadow = "0 4px 15px rgba(29, 209, 161, 0.4)";
+                e.currentTarget.style.boxShadow =
+                  "0 4px 15px rgba(29, 209, 161, 0.4)";
               }}
             >
               🚪 Logout
