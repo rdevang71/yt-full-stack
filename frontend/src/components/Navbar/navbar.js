@@ -22,7 +22,7 @@ const Navbar = ({ isLoggedIn, user, onToggleSidebar, isSidebarCollapsed }) => {
 
     const newGradient =
       routeBackgroundMap[location.pathname] ||
-      "linear-gradient(90deg, #ffffff, #f8f9fa)";
+      "linear-gradient(90deg, #000, #000)";
     setBackgroundGradient(newGradient);
     setHomeButtonGradient(newGradient);
     document.documentElement.style.setProperty("--navbar-bg", newGradient);

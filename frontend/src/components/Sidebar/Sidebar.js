@@ -21,6 +21,7 @@ const Sidebar = ({ isCollapsed }) => {
     flexGrow: 1,
     overflowY: "auto",
     paddingTop: "16px",
+    paddingBottom: "24px",
   };
 
   const baseLinkStyle = {
@@ -29,26 +30,33 @@ const Sidebar = ({ isCollapsed }) => {
     alignItems: "center",
     gap: "12px",
     justifyContent: isCollapsed ? "center" : "flex-start",
-    padding: "8px 12px",
+    padding: isCollapsed ? "8px" : "8px 16px",
     whiteSpace: "nowrap",
     transition: "all 0.3s ease",
     textDecoration: "none",
     color: "#fff",
     borderRadius: "6px",
+    position: "relative",
   };
 
   const iconStyle = {
     fontSize: "1.5rem",
+    transition: "transform 0.3s ease",
   };
 
   const activeLinkStyle = {
-    backgroundColor: "#1b1f1c",
-    color: "#1dd1a1",
+    backgroundColor: "#2f4c45ff",
+    color: "#000",
+    fontWeight: "600",
+  };
+
+  const hoverLinkStyle = {
+    backgroundColor: "#1a1a1a",
   };
 
   const hrStyle = {
-    borderColor: "#777",
-    margin: isCollapsed ? "8px auto" : "8px 12px",
+    borderColor: "#555",
+    margin: isCollapsed ? "8px auto" : "8px 16px",
     width: isCollapsed ? "40%" : "80%",
   };
 
@@ -78,6 +86,7 @@ const Sidebar = ({ isCollapsed }) => {
           }
 
           const isActive = location.pathname === item.href;
+
           return (
             <Link
               key={item.label}
@@ -86,7 +95,17 @@ const Sidebar = ({ isCollapsed }) => {
                 ...baseLinkStyle,
                 ...(isActive ? activeLinkStyle : {}),
               }}
-              className="text-white"
+              className="text-white sidebar-item"
+              onMouseEnter={(e) => {
+                if (!isActive) {
+                  e.currentTarget.style.backgroundColor = hoverLinkStyle.backgroundColor;
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isActive) {
+                  e.currentTarget.style.backgroundColor = "transparent";
+                }
+              }}
             >
               <span style={iconStyle}>{item.icon}</span>
               {!isCollapsed && <span>{item.label}</span>}

@@ -2,6 +2,16 @@ import React from "react";
 import FloatingMenu from "./FloatingMenu";
 
 const VideoCard = ({ video }) => {
+  const {
+    thumbnail = "https://via.placeholder.com/300x180?text=Thumbnail",
+    title = "Untitled Video",
+    description = "No description available.",
+    duration = 0,
+    owner,
+    createdAt,
+    _id,
+  } = video || {};
+
   return (
     <div className="container-fluid px-0" style={{ marginBottom: "1.8rem" }}>
       <div
@@ -24,7 +34,7 @@ const VideoCard = ({ video }) => {
           e.currentTarget.style.boxShadow = "none";
         }}
       >
-        {/* Thumbnail on top */}
+        {/* Thumbnail */}
         <div
           style={{
             position: "relative",
@@ -34,10 +44,7 @@ const VideoCard = ({ video }) => {
           }}
         >
           <img
-            src={
-              video.thumbnail ||
-              "https://via.placeholder.com/300x180?text=Thumbnail"
-            }
+            src={thumbnail}
             alt="Thumbnail"
             style={{
               width: "100%",
@@ -45,8 +52,7 @@ const VideoCard = ({ video }) => {
               objectFit: "cover",
             }}
           />
-
-          {/* Duration Overlay */}
+          {/* Duration */}
           <div
             style={{
               position: "absolute",
@@ -60,17 +66,16 @@ const VideoCard = ({ video }) => {
               borderRadius: "4px",
             }}
           >
-            {formatDuration(video.duration)}
+            {formatDuration(duration)}
           </div>
         </div>
 
-        {/* Info Section below */}
+        {/* Info Section */}
         <div
           className="p-3 d-flex flex-column justify-content-between"
           style={{ flex: 1 }}
         >
           <div>
-            {/* Title */}
             <h3
               className="mb-2"
               style={{
@@ -82,12 +87,11 @@ const VideoCard = ({ video }) => {
                 overflow: "hidden",
                 textOverflow: "ellipsis",
               }}
-              title={video.title}
+              title={title}
             >
-              {video.title}
+              {title}
             </h3>
 
-            {/* Truncated Description */}
             <p
               className="mb-2"
               style={{
@@ -97,12 +101,11 @@ const VideoCard = ({ video }) => {
                 overflow: "hidden",
                 textOverflow: "ellipsis",
               }}
-              title={video.description}
+              title={description}
             >
-              {video.description || "No description available."}
+              {description}
             </p>
 
-            {/* Uploader and Date */}
             <p
               className="mb-1"
               style={{
@@ -110,7 +113,7 @@ const VideoCard = ({ video }) => {
                 color: "#eeeeee",
               }}
             >
-              👤 <strong>{video.owner?.username || "Unknown"}</strong>
+              👤 <strong>{owner?.username || "Unknown"}</strong>
             </p>
             <p
               className="mb-0"
@@ -119,13 +122,11 @@ const VideoCard = ({ video }) => {
                 color: "#bbbbbb",
               }}
             >
-              📅 {new Date(video.createdAt).toLocaleDateString()} • ⏱️{" "}
-              {formatDuration(video.duration)}
+              📅 {createdAt ? new Date(createdAt).toLocaleDateString() : "N/A"} • ⏱️ {formatDuration(duration)}
             </p>
-            
-
           </div>
-          <FloatingMenu videoId={video._id} />
+
+          <FloatingMenu videoId={_id} />
         </div>
       </div>
     </div>
@@ -135,7 +136,7 @@ const VideoCard = ({ video }) => {
 const formatDuration = (seconds) => {
   if (!seconds || isNaN(seconds)) return "N/A";
   const mins = Math.floor(seconds / 60);
-  const secs = seconds % 60;
+  const secs = Math.floor(seconds % 60);
   return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
 };
 

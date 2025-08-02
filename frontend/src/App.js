@@ -10,6 +10,7 @@ import Playlist from "./components/playlist/playlist.js"; // ✅ Added import
 import "./App.css";
 import { getCurrentUser } from "./api/auth.js";
 import Publish from "./components/Video/Publish.js";
+import PlaylistDetails from "./components/playlist/PlaylistDetails.js"; // ✅ Add this
 
 function App() {
   const location = useLocation();
@@ -75,7 +76,9 @@ function App() {
               element={<Profile setIsLoggedIn={setIsLoggedIn} />}
             />
             <Route path="/publish" element={<Publish />} />
-            <Route path="/playlists" element={<Playlist />} /> {/* ✅ Added route */}
+            <Route path="/playlists" element={<Playlist />} /> 
+            <Route path="/playlist/:playlistId" element={<PlaylistDetails />} />
+
           </Routes>
         </div>
       )}
