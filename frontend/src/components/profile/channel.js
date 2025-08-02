@@ -1,38 +1,120 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getCurrentUser } from "../../api/user";
+import { useNavigate } from "react-router-dom";
+import Playlist from "../playlist/playlist.js";
+import "./Channel.css";
 
 function Channel() {
+  const [user, setUser] = useState(null);
+  const [activeTab, setActiveTab] = useState("playlists");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await getCurrentUser();
+        setUser(response.data.user);
+      } catch (err) {
+        console.error("Channel fetch failed", err);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  if (!user) return <div className="channel-loading">Loading...</div>;
+
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        backgroundColor: "#0d0d0d",
-        color: "#fff",
-        padding: "2rem",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      <h1 style={{ color: "#1dd1a1", marginBottom: "1rem" }}>Your Channel</h1>
-      <p style={{ fontSize: "1.2rem", color: "#ccc", maxWidth: "600px", textAlign: "center" }}>
-        This is where you can display your uploaded videos, playlists, and channel stats.
-        You can style this section to match your theme, animate content transitions,
-        or add edit/preview actions as needed.
-      </p>
-      {/* Placeholder for channel content */}
-      <div
-        style={{
-          marginTop: "2rem",
-          width: "100%",
-          maxWidth: "800px",
-          backgroundColor: "#1a1a1a",
-          borderRadius: "12px",
-          padding: "2rem",
-          border: "1px solid #333",
-        }}
-      >
-        <h2 style={{ color: "#1dd1a1" }}>📹 Your Videos</h2>
-        <p style={{ color: "#888" }}>No videos uploaded yet. Start building!</p>
+    <div className="channel-page">
+      <div className="channel-container">
+        {/* Cover Image */}
+        <div className="channel-cover">
+          <img
+            src={
+              user.coverImage?.includes("cloudinary")
+                ? user.coverImage.replace("http://", "https://")
+                : "https://images.unsplash.com/photo-1503264116251-35a269479413?fit=crop&w=960&q=80"
+            }
+            alt="Cover"
+            onError={(e) => {
+              e.target.src =
+                "https://images.unsplash.com/photo-1503264116251-35a269479413?fit=crop&w=960&q=80";
+            }}
+          />
+        </div>
+
+        {/* Avatar & Info */}
+        <div className="channel-header">
+          <img
+            className="channel-avatar"
+            src={
+              user.avatar?.includes("cloudinary")
+                ? user.avatar.replace("http://", "https://")
+                : "https://i.pravatar.cc/150?img=68"
+            }
+            alt="Avatar"
+            onError={(e) => {
+              e.target.src = "https://i.pravatar.cc/150?img=68";
+            }}
+          />
+          <div className="channel-info">
+            <h2 className="channel-name">{user.fullName}</h2>
+            <p className="channel-username">@{user.username}</p>
+            <p className="channel-email">{user.email}</p>
+            {user.bio && <p className="channel-bio">{user.bio}</p>}
+            <div className="channel-actions">
+              <button className="channel-btn">📺 Customise Channel</button>
+              <button className="channel-btn">🎛️ Manage Videos</button>
+            </div>
+          </div>
+        </div>
+
+        {/* Navigation Tabs */}
+        <div className="channel-navbar">
+          <button
+            className={`channel-tab ${activeTab === "playlists" ? "active" : ""}`}
+            onClick={() => setActiveTab("playlists")}
+          >
+            🎵 Playlists
+          </button>
+          <button
+            className={`channel-tab ${activeTab === "videos" ? "active" : ""}`}
+            onClick={() => setActiveTab("videos")}
+          >
+            📹 Videos
+          </button>
+          <button
+            className={`channel-tab ${activeTab === "tweets" ? "active" : ""}`}
+            onClick={() => setActiveTab("tweets")}
+          >
+            🐦 Tweets
+          </button>
+        </div>
+
+        <hr />
+
+        {/* Playlists Tab */}
+        {activeTab === "playlists" && (
+          <div className="channel-playlists">
+            <Playlist />
+          </div>
+        )}
+
+        {/* Videos Tab */}
+        {activeTab === "videos" && (
+          <div className="channel-videos">
+            <h3>📹 Uploaded Videos</h3>
+            <p style={{ color: "#aaa" }}>Coming soon...</p>
+          </div>
+        )}
+
+        {/* Tweets Tab */}
+        {activeTab === "tweets" && (
+          <div className="channel-tweets">
+            <h3>🐦 Posted Tweets</h3>
+            <p style={{ color: "#aaa" }}>Coming soon...</p>
+          </div>
+        )}
       </div>
     </div>
   );

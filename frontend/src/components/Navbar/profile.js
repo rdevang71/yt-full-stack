@@ -120,6 +120,7 @@ function Profile({ setIsLoggedIn }) {
             <h2
               style={{
                 color: "#1dd1a1",
+                marginTop:"50px",
                 fontWeight: "bold",
                 marginBottom: "0.5rem",
               }}
