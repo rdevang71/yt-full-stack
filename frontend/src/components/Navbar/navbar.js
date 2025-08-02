@@ -55,22 +55,24 @@ const Navbar = ({ isLoggedIn, user, onToggleSidebar, isSidebarCollapsed }) => {
       }}
     >
       <div className="d-flex align-items-center gap-3">
-        {/* Hamburger menu icon to toggle sidebar */}
-        <span
-          className="hamburger-icon"
-          onClick={onToggleSidebar}
-          title="Toggle Sidebar"
-          style={{
-            cursor: "pointer",
-            fontSize: "1.8rem",
-            color: "#fff",
-            padding: "4px 8px",
-            backgroundColor: "#000",
-            borderRadius: "6px",
-          }}
-        >
-          ☰
-        </span>
+        {/* Hamburger menu icon always shown */}
+        {isLoggedIn && (
+          <span
+            className="hamburger-icon"
+            onClick={onToggleSidebar}
+            title="Toggle Sidebar"
+            style={{
+              cursor: "pointer",
+              fontSize: "1.8rem",
+              color: "#fff",
+              padding: "4px 8px",
+              backgroundColor: "#000",
+              borderRadius: "6px",
+            }}
+          >
+            ☰
+          </span>
+        )}
 
         {/* Logo */}
         <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
