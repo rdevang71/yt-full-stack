@@ -1,8 +1,7 @@
-// src/components/Profile.js
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // 👈 Added for navigation
+import { useNavigate } from "react-router-dom";
 import { getCurrentUser } from "../../api/user";
-import { logoutUser } from "../../api/auth"; // 👈 Directly use logout API
+import { logoutUser } from "../../api/auth";
 import "./profile.css";
 
 function Profile({ setIsLoggedIn }) {
@@ -13,7 +12,6 @@ function Profile({ setIsLoggedIn }) {
     const fetchProfile = async () => {
       try {
         const response = await getCurrentUser();
-        console.log("Fetched User Data:", response.data.user);
         setUser(response.data.user);
       } catch (err) {
         console.error("Profile fetch failed", err);
@@ -34,7 +32,7 @@ function Profile({ setIsLoggedIn }) {
     }
   };
 
-  if (!user) return <div className="text-center mt-5">Loading...</div>;
+  if (!user) return <div className="text-center mt-5 text-white">Loading...</div>;
 
   const formattedDate = new Date(user.createdAt).toLocaleDateString("en-IN", {
     year: "numeric",
@@ -43,134 +41,145 @@ function Profile({ setIsLoggedIn }) {
   });
 
   return (
-    <div className="container mt-5">
+    <div
+      style={{
+        minHeight: "100vh",
+        backgroundColor: "#0d0d0d",
+        color: "#fff",
+        padding: "2rem",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "start",
+      }}
+    >
       <div
-        className="card shadow"
         style={{
-          maxWidth: "600px",
-          margin: "0 auto",
-          borderRadius: "20px",
+          width: "100%",
+          maxWidth: "960px",
+          backgroundColor: "#111",
+          borderRadius: "16px",
+          boxShadow: "0 0 20px rgba(0, 0, 0, 0.6)",
           overflow: "hidden",
+          border: "1px solid #222",
         }}
       >
-        {/* Cover Image */}
-        <div style={{ position: "relative" }}>
+        {/* Cover Image Container */}
+        <div style={{ position: "relative", height: "250px", width: "100%" }}>
           <img
             src={
               user.coverImage && user.coverImage.includes("cloudinary")
                 ? user.coverImage.replace("http://", "https://")
-                : "https://images.unsplash.com/photo-1503264116251-35a269479413?fit=crop&w=900&q=80"
+                : "https://images.unsplash.com/photo-1503264116251-35a269479413?fit=crop&w=960&q=80"
             }
             alt="Cover"
             style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
               width: "100%",
-              height: "180px",
+              height: "100%",
               objectFit: "cover",
             }}
             onError={(e) => {
               e.target.src =
-                "https://images.unsplash.com/photo-1503264116251-35a269479413?fit=crop&w=900&q=80";
+                "https://images.unsplash.com/photo-1503264116251-35a269479413?fit=crop&w=960&q=80";
             }}
           />
 
-          {/* Avatar Overlay */}
+          {/* Avatar */}
           <img
-            className="rounded-circle"
             src={
               user.avatar && user.avatar.includes("cloudinary")
                 ? user.avatar.replace("http://", "https://")
                 : "https://i.pravatar.cc/150?img=68"
             }
+            alt="User Avatar"
             onError={(e) => {
               e.target.src = "https://i.pravatar.cc/150?img=68";
             }}
-            alt="User Avatar"
             style={{
-              width: "120px",
-              height: "120px",
+              width: "130px",
+              height: "130px",
               objectFit: "cover",
-              border: "4px solid white",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+              borderRadius: "50%",
+              border: "4px solid #000",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
               position: "absolute",
-              bottom: "-60px",
+              bottom: "-65px",
               left: "50%",
               transform: "translateX(-50%)",
-              backgroundColor: "#fff",
+              backgroundColor: "#000",
             }}
           />
         </div>
 
-        {/* Info Section */}
-        <div style={{ paddingTop: "80px", padding: "1.5rem" }}>
-          <div className="text-center mb-3 mt-5">
-            <h3 style={{ color: "#6c5ce7", fontWeight: "bold" }}>
+        <div style={{ paddingTop: "120px", padding: "2rem" }}>
+          {/* Full Name & Join Date */}
+          <div className="text-center mb-4">
+            <h2 style={{ color: "#1dd1a1", fontWeight: "bold", marginBottom: "0.5rem" }}>
               {user.fullName}
-            </h3>
-            <p style={{ fontStyle: "italic", color: "#888" }}>
+            </h2>
+            <p style={{ fontStyle: "italic", color: "#ccc" }}>
               Member since {formattedDate}
             </p>
           </div>
+
+          {/* Profile Details */}
           <div
             style={{
-              fontSize: "17px",
-              backgroundColor: "#f9f9f9",
-              padding: "20px",
+              backgroundColor: "#1a1a1a",
+              padding: "1.5rem",
               borderRadius: "12px",
-              boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-              color: "#333",
-              lineHeight: "1.6",
-              maxWidth: "600px",
+              boxShadow: "0 2px 10px rgba(0,0,0,0.6)",
+              border: "1px solid #333",
+              lineHeight: "1.8",
+              fontSize: "16px",
+              maxWidth: "720px",
               margin: "0 auto",
             }}
           >
-            <p style={{ marginBottom: "12px" }}>
-              <strong style={{ color: "#000" }}>👤 Username:</strong>{" "}
-              <span style={{ color: "#333" }}>{user.username}</span>
-            </p>
-            <p style={{ marginBottom: "12px" }}>
-              <strong style={{ color: "#000" }}>📧 Email:</strong>{" "}
-              <span style={{ color: "#333" }}>{user.email}</span>
-            </p>
+            <p><strong style={{ color: "#1dd1a1" }}>👤 Username:</strong> {user.username}</p>
+            <p><strong style={{ color: "#1dd1a1" }}>📧 Email:</strong> {user.email}</p>
+            {user.phone && (
+              <p><strong style={{ color: "#1dd1a1" }}>📞 Phone:</strong> {user.phone}</p>
+            )}
+            {user.gender && (
+              <p><strong style={{ color: "#1dd1a1" }}>⚧ Gender:</strong> {user.gender}</p>
+            )}
+            {user.role && (
+              <p><strong style={{ color: "#1dd1a1" }}>🔖 Role:</strong> {user.role}</p>
+            )}
             {user.bio && (
-              <p style={{ marginBottom: "12px" }}>
-                <strong style={{ color: "#000" }}>📝 Bio:</strong>{" "}
-                <span style={{ color: "#333" }}>{user.bio}</span>
-              </p>
+              <p><strong style={{ color: "#1dd1a1" }}>📝 Bio:</strong> {user.bio}</p>
             )}
             {user.location && (
-              <p style={{ marginBottom: "0" }}>
-                <strong style={{ color: "#000" }}>📍 Location:</strong>{" "}
-                <span style={{ color: "#333" }}>{user.location}</span>
-              </p>
+              <p><strong style={{ color: "#1dd1a1" }}>📍 Location:</strong> {user.location}</p>
             )}
           </div>
 
-          <div className="mt-4 text-center">
+          {/* Logout Button */}
+          <div className="mt-5 text-center">
             <button
               onClick={handleLogout}
               style={{
-                background: "linear-gradient(135deg, #242323ff, #242423ff)",
-                color: "#fff",
+                background: "linear-gradient(135deg, #1dd1a1, #10ac84)",
+                color: "#000",
                 border: "none",
-                padding: "12px 28px",
+                padding: "12px 30px",
                 borderRadius: "30px",
                 fontSize: "1rem",
                 fontWeight: "600",
                 cursor: "pointer",
-                boxShadow: "0 4px 15px rgba(255, 78, 80, 0.4)",
+                boxShadow: "0 4px 15px rgba(29, 209, 161, 0.4)",
                 transition: "all 0.3s ease-in-out",
-                position: "relative",
-                overflow: "hidden",
               }}
               onMouseOver={(e) => {
                 e.currentTarget.style.transform = "scale(1.05)";
-                e.currentTarget.style.boxShadow =
-                  "0 6px 20px rgba(67, 62, 62, 0.6)";
+                e.currentTarget.style.boxShadow = "0 6px 20px rgba(29, 209, 161, 0.6)";
               }}
               onMouseOut={(e) => {
                 e.currentTarget.style.transform = "scale(1)";
-                e.currentTarget.style.boxShadow =
-                  "0 4px 15px rgba(53, 49, 49, 0.4)";
+                e.currentTarget.style.boxShadow = "0 4px 15px rgba(29, 209, 161, 0.4)";
               }}
             >
               🚪 Logout
