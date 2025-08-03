@@ -55,24 +55,24 @@ const Sidebar = ({ isCollapsed }) => {
   };
 
   const hrStyle = {
-  borderColor: "#888",         
-  backgroundColor: "#888",    
-  height: "3px",               
-  margin: isCollapsed ? "8px auto" : "8px 16px",
-  width: isCollapsed ? "50%" : "100%",
-  borderRadius: "1.5px",         
-  border: "none",              
-};
+    borderColor: "#888",
+    backgroundColor: "#888",
+    height: "3px",
+    margin: isCollapsed ? "8px auto" : "8px 16px",
+    width: isCollapsed ? "50%" : "100%",
+    borderRadius: "1.5px",
+    border: "none",
+  };
 
   const navItems = [
     { label: "Home", icon: "🏠", href: "/" },
     { label: "Trending", icon: "🔥", href: "/trending" },
     { divider: true },
     { label: "You", icon: "👤", href: "/profile" },
-    { label: "Your Channel", icon: "📡", href: "/channel" }, // ✅ New item
+    { label: "Your Channel", icon: "📡", href: "/channel" },
     { label: "History", icon: "⏳", href: "/history" },
     { label: "Playlists", icon: "🗂️", href: "/playlists" },
-    { label: "Your videos", icon: "📹", href: "/your-videos" },
+    { label: "Your videos", icon: "📹", href: "/your-videos" }, // ✅ Route that matches new YourVideosPage
     { label: "Your courses", icon: "🎓", href: "/your-courses" },
     { label: "Liked videos", icon: "👍", href: "/liked-videos" },
     { divider: true },

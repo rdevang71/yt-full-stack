@@ -12,6 +12,7 @@ import { getCurrentUser } from "./api/auth.js";
 import Publish from "./components/Video/Publish.js";
 import PlaylistDetails from "./components/playlist/PlaylistDetails.js"; 
 import Channel from "./components/profile/channel.js"
+import YourVideosPage from "./components/Video/YourVideosPage.js";
 
 
 function App() {
@@ -81,6 +82,7 @@ function App() {
             <Route path="/playlists" element={<Playlist />} /> 
             <Route path="/playlist/:playlistId" element={<PlaylistDetails />} />
             <Route path="/channel" element={<Channel />} />
+            <Route path="/your-videos" element={<YourVideosPage />} />
           </Routes>
         </div>
       )}
