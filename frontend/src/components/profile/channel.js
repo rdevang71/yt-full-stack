@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { getCurrentUser } from "../../api/user";
+import { fetchUserVideos } from "../../api/video";
 import { useNavigate } from "react-router-dom";
 import Playlist from "../playlist/playlist.js";
+import VideoCard from "../Video/VideoCard"; // ✅ Reusing existing component
 import "./Channel.css";
 
 function Channel() {
   const [user, setUser] = useState(null);
   const [activeTab, setActiveTab] = useState("playlists");
+  const [videos, setVideos] = useState([]);
+  const [loadingVideos, setLoadingVideos] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,6 +25,24 @@ function Channel() {
 
     fetchUser();
   }, []);
+
+  useEffect(() => {
+    if (activeTab === "videos") {
+      const loadVideos = async () => {
+        setLoadingVideos(true);
+        try {
+          const res = await fetchUserVideos();
+          setVideos(res);
+        } catch (err) {
+          console.error("Failed to fetch user videos", err);
+        } finally {
+          setLoadingVideos(false);
+        }
+      };
+
+      loadVideos();
+    }
+  }, [activeTab]);
 
   if (!user) return <div className="channel-loading">Loading...</div>;
 
@@ -104,7 +126,17 @@ function Channel() {
         {activeTab === "videos" && (
           <div className="channel-videos">
             <h3>📹 Uploaded Videos</h3>
-            <p style={{ color: "#aaa" }}>Coming soon...</p>
+            {loadingVideos ? (
+              <p style={{ color: "#aaa" }}>Loading videos...</p>
+            ) : videos.length === 0 ? (
+              <p style={{ color: "#aaa" }}>No videos found.</p>
+            ) : (
+              <div className="video-list-grid">
+                {videos.map((video) => (
+                  <VideoCard key={video._id} video={video} />
+                ))}
+              </div>
+            )}
           </div>
         )}
 

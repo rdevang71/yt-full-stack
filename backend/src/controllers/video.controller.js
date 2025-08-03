@@ -119,24 +119,28 @@ const updateVideo = asyncHandler(async (req, res) => {
     throw new apiError(403, "You are not authorized to update this video");
   }
 
+  const updates = {};
+  if (title) updates.title = title;
+  if (description) updates.description = description;
+
   if (req.files?.thumbnail?.[0]?.path) {
     const newThumbnail = await uploadOnCloudinary(req.files.thumbnail[0].path);
     if (!newThumbnail?.secure_url) {
       throw new apiError(500, "Failed to upload new thumbnail");
     }
-    video.thumbnail = newThumbnail.secure_url;
+    updates.thumbnail = newThumbnail.secure_url;
   }
 
-  if (title) video.title = title;
-  if (description) video.description = description;
 
-  await video.save();
-
-  await video.populate("owner", "username avatar");
+  const updatedVideo = await Video.findByIdAndUpdate(
+    videoId,
+    { $set: updates },
+    { new: true }
+  ).populate("owner", "username avatar");
 
   return res
     .status(200)
-    .json(new apiResponse(200, video, "Video updated successfully"));
+    .json(new apiResponse(200, updatedVideo, "Video updated successfully"));
 });
 
 const deleteVideo = asyncHandler(async (req, res) => {
@@ -187,6 +191,46 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
     new apiResponse(200, { isPublished: video.isPublished }, `Video has been ${video.isPublished ? "published" : "unpublished"}`)
   );
 });
+const getUserVideos = asyncHandler(async (req, res) => {
+  const userId = req.user?._id;
+
+  if (!userId) {
+    throw new apiError(401, "User not authenticated");
+  }
+
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+
+  const userVideos = await Video.find({
+    owner: userId,
+  })
+    .populate("owner", "username avatar")
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
+
+  const total = await Video.countDocuments({
+    owner: userId,
+    isPublished: true
+  });
+
+  return res.status(200).json(
+    new apiResponse(
+      200,
+      {
+        videos: userVideos,
+        pagination: {
+          total,
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit)
+        }
+      },
+      "Fetched user videos successfully"
+    )
+  );
+});
 
 
-export { getAllVideos, publishAVideo, getVideoById, updateVideo , deleteVideo , togglePublishStatus };
+export { getAllVideos, publishAVideo, getVideoById, updateVideo , deleteVideo ,getUserVideos, togglePublishStatus };
