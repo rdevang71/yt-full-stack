@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import LikedVideos from "./LikedVideos.js"; // Ensures proper route load via /liked-videos
 
 const Sidebar = ({ isCollapsed }) => {
   const location = useLocation();
@@ -64,20 +65,20 @@ const Sidebar = ({ isCollapsed }) => {
     border: "none",
   };
 
-const navItems = [
-  { label: "Home", icon: "🏠", href: "/" },
-  { label: "Tweets", icon: "🗨️", href: "/tweets" },
-  { label: "Trending", icon: "🔥", href: "/trending" },
-  { divider: true },
-  { label: "You", icon: "👤", href: "/profile" },
-  { label: "Your Channel", icon: "📡", href: "/channel" },
-  { label: "History", icon: "⏳", href: "/history" },
-  { label: "Playlists", icon: "🗂️", href: "/playlists" },
-  { label: "Your videos", icon: "📹", href: "/your-videos" },
-  { label: "Your courses", icon: "🎓", href: "/your-courses" },
-  { label: "Liked videos", icon: "👍", href: "/liked-videos" },
-  { divider: true },
-];
+  const navItems = [
+    { label: "Home", icon: "🏠", href: "/" },
+    { label: "Tweets", icon: "🗨️", href: "/tweets" },
+    { label: "Trending", icon: "🔥", href: "/trending" },
+    { divider: true },
+    { label: "You", icon: "👤", href: "/profile" },
+    { label: "Your Channel", icon: "📡", href: "/channel" },
+    { label: "History", icon: "⏳", href: "/history" },
+    { label: "Playlists", icon: "🗂️", href: "/playlists" },
+    { label: "Your videos", icon: "📹", href: "/your-videos" },
+    { label: "Your courses", icon: "🎓", href: "/your-courses" },
+    { label: "Liked videos", icon: "👍", href: "/liked-videos" },
+    { divider: true },
+  ];
 
   return (
     <div className="sidebar" style={sidebarStyle}>
@@ -103,7 +104,8 @@ const navItems = [
               className="text-white sidebar-item"
               onMouseEnter={(e) => {
                 if (!isActive) {
-                  e.currentTarget.style.backgroundColor = hoverLinkStyle.backgroundColor;
+                  e.currentTarget.style.backgroundColor =
+                    hoverLinkStyle.backgroundColor;
                 }
               }}
               onMouseLeave={(e) => {
