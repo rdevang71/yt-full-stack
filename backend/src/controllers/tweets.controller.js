@@ -27,6 +27,38 @@ const createTweet = asyncHandler(async (req, res) => {
     .json(new apiResponse(200, publishedTweet, "Tweet created successfully"));
 });
 
+const getAllTweets = asyncHandler(async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+
+  if (page < 1 || limit < 1) {
+    throw new apiError(400, "Page and limit must be positive integers");
+  }
+
+  const skip = (page - 1) * limit;
+
+  const totalTweets = await Tweet.countDocuments();
+
+  const tweets = await Tweet.find({})
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit)
+    .populate("owner", "fullName avatar username");
+
+  return res.status(200).json(
+    new apiResponse(200, {
+      tweets,
+      pagination: {
+        total: totalTweets,
+        page,
+        limit,
+        totalPages: Math.ceil(totalTweets / limit),
+      },
+    }, "Fetched all tweets successfully")
+  );
+});
+
+
 const getUserTweets = asyncHandler(async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
@@ -131,9 +163,10 @@ const deleteTweet = asyncHandler(async (req, res) => {
     .json(new apiResponse(200, null, "tweet deleted successfully"));
 });
 
-export { 
-    createTweet,
-    getUserTweets,
-    updateTweet,
-    deleteTweet 
+export {
+  createTweet,
+  getUserTweets,
+  updateTweet,
+  deleteTweet,
+  getAllTweets,
 };

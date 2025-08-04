@@ -237,17 +237,6 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
     .json(new apiResponse(200, {}, "Password changed successfully"));
 });
 
-const getCurrentUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id).select(
-    "-password -refreshToken"
-  );
-  if (!user) {
-    throw new apiError(404, "User not found");
-  }
-  return res
-    .status(200)
-    .json(new apiResponse(200, { user }, "Current user fetched successfully"));
-});
 
 const updateAccountDetails = asyncHandler(async(req,res)=>{
   const {fullName, email }= req.body
@@ -324,7 +313,7 @@ const updateUsercoverImage = asyncHandler( async(req,res )=>{
     req.user?._id,
     {
       $set:{
-        avatar : coverImage.url
+        coverImage : coverImage.url
       }
     },
     {
@@ -338,6 +327,18 @@ const updateUsercoverImage = asyncHandler( async(req,res )=>{
     new apiResponse(200, user , "Cover Image updated Successfully")
   )
 })
+
+const getCurrentUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id).select(
+    "-password -refreshToken"
+  );
+  if (!user) {
+    throw new apiError(404, "User not found");
+  }
+  return res
+    .status(200)
+    .json(new apiResponse(200, { user }, "Current user fetched successfully"));
+});
 
 const getUserChannelProfile = asyncHandler(async (req, res) => {
   const {username} = req.params
