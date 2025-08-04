@@ -1,30 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { fetchLikedVideos } from "../../api/like";
-import VideoCard from "../Video/VideoCard.js";
+import { fetchUserVideos } from "../../api/video";
+import VideoCard from "../Video/VideoCard";
 
-const LikedVideos = () => {
+const ManageVideosPage = () => {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadLiked = async () => {
+    const loadVideos = async () => {
       try {
-        const res = await fetchLikedVideos();
-        const safeVideos = Array.isArray(res.data)
-          ? res.data
-              .map((like) => like?.video)
-              .filter((video) => video && video._id)
-          : [];
-
-        setVideos(safeVideos);
+        const data = await fetchUserVideos();
+        setVideos(data);
       } catch (err) {
-        console.error("Failed to fetch liked videos:", err);
+        console.error("Failed to load videos:", err);
       } finally {
         setLoading(false);
       }
     };
-
-    loadLiked();
+    loadVideos();
   }, []);
 
   const pageStyle = {
@@ -53,11 +46,11 @@ const LikedVideos = () => {
 
   return (
     <div style={pageStyle}>
-      <h2 style={headingStyle}>Liked Videos</h2>
+      <h2 style={headingStyle}>🎛️ Manage Your Videos</h2>
       {loading ? (
-        <p style={messageStyle}>Loading liked videos...</p>
+        <p style={messageStyle}>Loading...</p>
       ) : videos.length === 0 ? (
-        <p style={messageStyle}>No liked videos found.</p>
+        <p style={messageStyle}>You haven't uploaded any videos yet.</p>
       ) : (
         <div style={gridStyle}>
           {videos.map((video) => (
@@ -69,4 +62,4 @@ const LikedVideos = () => {
   );
 };
 
-export default LikedVideos;
+export default ManageVideosPage;

@@ -15,6 +15,8 @@ import Channel from "./components/channel/channel.js"
 import YourVideosPage from "./components/Video/YourVideosPage.js";
 import Tweets from "./components/Tweet/Tweets.js";
 import LikedVideos from "./components/Sidebar/LikedVideos.js";
+import ManageVideosPage from "./components/channel/ManageVideosPage";
+
 
 
 
@@ -89,6 +91,8 @@ function App() {
             <Route path="/your-videos" element={<YourVideosPage />} />
             <Route path="/tweets" element={<Tweets />} />
             <Route path="/liked-videos" element={<LikedVideos />} />
+            <Route path="/manage-videos" element={<ManageVideosPage />} />
+
 
           </Routes>
         </div>

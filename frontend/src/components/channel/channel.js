@@ -116,7 +116,12 @@ function Channel() {
               >
                 📺 Customise Channel
               </button>
-              <button className="channel-btn">🎛️ Manage Videos</button>
+              <button
+                className="channel-btn"
+                onClick={() => navigate("/manage-videos")}
+              >
+                🎛️ Manage Videos
+              </button>
             </div>
           </div>
         </div>
@@ -124,7 +129,9 @@ function Channel() {
         {/* Navigation Tabs */}
         <div className="channel-navbar">
           <button
-            className={`channel-tab ${activeTab === "playlists" ? "active" : ""}`}
+            className={`channel-tab ${
+              activeTab === "playlists" ? "active" : ""
+            }`}
             onClick={() => setActiveTab("playlists")}
           >
             🎵 Playlists
@@ -197,7 +204,10 @@ function Channel() {
 
       {/* Settings Modal */}
       {showSettings && (
-        <ChannelSettingsModal user={user} onClose={() => setShowSettings(false)} />
+        <ChannelSettingsModal
+          user={user}
+          onClose={() => setShowSettings(false)}
+        />
       )}
     </div>
   );
