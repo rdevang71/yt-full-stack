@@ -64,19 +64,20 @@ const Sidebar = ({ isCollapsed }) => {
     border: "none",
   };
 
-  const navItems = [
-    { label: "Home", icon: "🏠", href: "/" },
-    { label: "Trending", icon: "🔥", href: "/trending" },
-    { divider: true },
-    { label: "You", icon: "👤", href: "/profile" },
-    { label: "Your Channel", icon: "📡", href: "/channel" },
-    { label: "History", icon: "⏳", href: "/history" },
-    { label: "Playlists", icon: "🗂️", href: "/playlists" },
-    { label: "Your videos", icon: "📹", href: "/your-videos" }, // ✅ Route that matches new YourVideosPage
-    { label: "Your courses", icon: "🎓", href: "/your-courses" },
-    { label: "Liked videos", icon: "👍", href: "/liked-videos" },
-    { divider: true },
-  ];
+const navItems = [
+  { label: "Home", icon: "🏠", href: "/" },
+  { label: "Tweets", icon: "🗨️", href: "/tweets" },
+  { label: "Trending", icon: "🔥", href: "/trending" },
+  { divider: true },
+  { label: "You", icon: "👤", href: "/profile" },
+  { label: "Your Channel", icon: "📡", href: "/channel" },
+  { label: "History", icon: "⏳", href: "/history" },
+  { label: "Playlists", icon: "🗂️", href: "/playlists" },
+  { label: "Your videos", icon: "📹", href: "/your-videos" },
+  { label: "Your courses", icon: "🎓", href: "/your-courses" },
+  { label: "Liked videos", icon: "👍", href: "/liked-videos" },
+  { divider: true },
+];
 
   return (
     <div className="sidebar" style={sidebarStyle}>

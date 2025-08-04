@@ -1,16 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { getCurrentUser } from "../../api/user";
-import { fetchUserVideos } from "../../api/video";
+import {
+  getCurrentUser,
+  updateAccountDetails,
+  changePassword,
+  updateAvatar,
+  updateCoverImage,
+} from "../../api/user.js";
+import { fetchUserVideos } from "../../api/video.js";
+import { fetchUserTweets } from "../../api/tweet.js";
 import { useNavigate } from "react-router-dom";
 import Playlist from "../playlist/playlist.js";
-import VideoCard from "../Video/VideoCard"; // ✅ Reusing existing component
+import VideoCard from "../Video/VideoCard.js";
+import TweetCard from "../Tweet/Tweetcard.js";
+import ChannelSettingsModal from "./ChannelSettingsModal.js";
 import "./Channel.css";
 
 function Channel() {
   const [user, setUser] = useState(null);
   const [activeTab, setActiveTab] = useState("playlists");
   const [videos, setVideos] = useState([]);
+  const [tweets, setTweets] = useState([]);
   const [loadingVideos, setLoadingVideos] = useState(false);
+  const [loadingTweets, setLoadingTweets] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,7 +34,6 @@ function Channel() {
         console.error("Channel fetch failed", err);
       }
     };
-
     fetchUser();
   }, []);
 
@@ -39,8 +50,22 @@ function Channel() {
           setLoadingVideos(false);
         }
       };
-
       loadVideos();
+    }
+
+    if (activeTab === "tweets") {
+      const loadTweets = async () => {
+        setLoadingTweets(true);
+        try {
+          const res = await fetchUserTweets();
+          setTweets(res);
+        } catch (err) {
+          console.error("Failed to fetch user tweets", err);
+        } finally {
+          setLoadingTweets(false);
+        }
+      };
+      loadTweets();
     }
   }, [activeTab]);
 
@@ -85,7 +110,12 @@ function Channel() {
             <p className="channel-email">{user.email}</p>
             {user.bio && <p className="channel-bio">{user.bio}</p>}
             <div className="channel-actions">
-              <button className="channel-btn">📺 Customise Channel</button>
+              <button
+                className="channel-btn"
+                onClick={() => setShowSettings(true)}
+              >
+                📺 Customise Channel
+              </button>
               <button className="channel-btn">🎛️ Manage Videos</button>
             </div>
           </div>
@@ -109,20 +139,20 @@ function Channel() {
             className={`channel-tab ${activeTab === "tweets" ? "active" : ""}`}
             onClick={() => setActiveTab("tweets")}
           >
-            🐦 Tweets
+            🗨️ Tweets
           </button>
         </div>
 
         <hr />
 
-        {/* Playlists Tab */}
+        {/* Playlists */}
         {activeTab === "playlists" && (
           <div className="channel-playlists">
             <Playlist />
           </div>
         )}
 
-        {/* Videos Tab */}
+        {/* Videos */}
         {activeTab === "videos" && (
           <div className="channel-videos">
             <h3>📹 Uploaded Videos</h3>
@@ -140,14 +170,35 @@ function Channel() {
           </div>
         )}
 
-        {/* Tweets Tab */}
+        {/* Tweets */}
         {activeTab === "tweets" && (
           <div className="channel-tweets">
-            <h3>🐦 Posted Tweets</h3>
-            <p style={{ color: "#aaa" }}>Coming soon...</p>
+            <h3>🗨️ Posted Tweets</h3>
+            {loadingTweets ? (
+              <p style={{ color: "#aaa" }}>Loading tweets...</p>
+            ) : tweets.length === 0 ? (
+              <p style={{ color: "#aaa" }}>No tweets posted yet.</p>
+            ) : (
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+                  gap: "20px",
+                }}
+              >
+                {tweets.map((tweet) => (
+                  <TweetCard key={tweet._id} tweet={tweet} />
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>
+
+      {/* Settings Modal */}
+      {showSettings && (
+        <ChannelSettingsModal user={user} onClose={() => setShowSettings(false)} />
+      )}
     </div>
   );
 }
