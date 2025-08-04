@@ -14,3 +14,4 @@ export const fetchUserVideos = async (page = 1, limit = 10) => {
   const res = await API.get(`/Uservideos?page=${page}&limit=${limit}`);
   return res.data.data.videos;
 };
+

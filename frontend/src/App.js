@@ -11,8 +11,11 @@ import "./App.css";
 import { getCurrentUser } from "./api/auth.js";
 import Publish from "./components/Video/Publish.js";
 import PlaylistDetails from "./components/playlist/PlaylistDetails.js"; 
-import Channel from "./components/profile/channel.js"
+import Channel from "./components/channel/channel.js"
 import YourVideosPage from "./components/Video/YourVideosPage.js";
+import Tweets from "./components/Tweet/Tweets.js";
+
+
 
 
 function App() {
@@ -83,6 +86,7 @@ function App() {
             <Route path="/playlist/:playlistId" element={<PlaylistDetails />} />
             <Route path="/channel" element={<Channel />} />
             <Route path="/your-videos" element={<YourVideosPage />} />
+            <Route path="/tweets" element={<Tweets />} />
           </Routes>
         </div>
       )}
