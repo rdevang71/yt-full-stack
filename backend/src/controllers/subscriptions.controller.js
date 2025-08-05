@@ -5,7 +5,6 @@ import { apiError } from "../utils/apiErrors.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
-// Toggle subscription controller
 const toggleSubscription = asyncHandler(async (req, res) => {
   const { channelId } = req.params;
   const subscriberId = req.user._id;
@@ -68,7 +67,7 @@ const toggleSubscription = asyncHandler(async (req, res) => {
   }
 });
 
-// Get subscribers of a channel
+
 const getUserChannelSubscribers = asyncHandler(async (req, res) => {
   const { channelId } = req.params;
 
@@ -95,7 +94,7 @@ const getUserChannelSubscribers = asyncHandler(async (req, res) => {
   );
 });
 
-// Get channels subscribed by a user
+
 const getSubscribedChannels = asyncHandler(async (req, res) => {
   const { subscriberId } = req.params;
 
