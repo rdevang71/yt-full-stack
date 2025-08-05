@@ -1,15 +1,14 @@
-// src/components/navbar/Navbar.js
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./navbar.css";
-import PublishModal from "./PublishModal"; // ✅ NEW
+import PublishModal from "./PublishModal"; 
 
 const Navbar = ({ isLoggedIn, user, onToggleSidebar, isSidebarCollapsed }) => {
   const [backgroundGradient, setBackgroundGradient] = useState(
     "linear-gradient(90deg, #ffffff, #f8f9fa)"
   );
   const [homeButtonGradient, setHomeButtonGradient] = useState("#ffffff");
-  const [showPublishModal, setShowPublishModal] = useState(false); // ✅ NEW
+  const [showPublishModal, setShowPublishModal] = useState(false); 
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -124,7 +123,7 @@ const Navbar = ({ isLoggedIn, user, onToggleSidebar, isSidebarCollapsed }) => {
                     btn.style.backgroundColor = "#2a2d2bff";
                     if (icon) icon.style.backgroundColor = "#2a2d2bff";
                   }}
-                  onClick={() => setShowPublishModal(true)} // ✅ NEW
+                  onClick={() => setShowPublishModal(true)} 
                 >
                   <span
                     style={{
