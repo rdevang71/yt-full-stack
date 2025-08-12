@@ -83,7 +83,7 @@ const publishAVideo = asyncHandler(async (req, res) => {
 });
 
 const getVideoById = asyncHandler(async (req, res) => {
-  const { videoId } = req.query;
+  const { videoId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(videoId)) {
     throw new apiError(400, "Invalid video ID");

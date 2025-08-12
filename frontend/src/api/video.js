@@ -23,5 +23,5 @@ export const fetchVideoById = async (id, token) => {
       Authorization: `Bearer ${token}`,
     },
   });
-  return res.data.data.video;
+  return res.data.data;
 };
