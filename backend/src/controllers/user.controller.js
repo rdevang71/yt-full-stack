@@ -237,7 +237,6 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
     .json(new apiResponse(200, {}, "Password changed successfully"));
 });
 
-
 const updateAccountDetails = asyncHandler(async(req,res)=>{
   const {fullName, email }= req.body
 
