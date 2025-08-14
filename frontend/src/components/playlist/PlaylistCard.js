@@ -8,11 +8,17 @@ const PlaylistCard = ({ playlist, onDelete, onUpdate, isSelected, onSelect }) =>
   const [updatedName, setUpdatedName] = useState(playlist.name);
   const [updatedDescription, setUpdatedDescription] = useState(playlist.description);
   const menuRef = useRef();
+  const formRef = useRef();
   const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(e.target) &&
+        formRef.current &&
+        !formRef.current.contains(e.target)
+      ) {
         setMenuOpen(false);
         setShowUpdateForm(false);
       }
@@ -52,17 +58,17 @@ const PlaylistCard = ({ playlist, onDelete, onUpdate, isSelected, onSelect }) =>
   return (
     <li
       style={{
-        backgroundColor: "#1b1f1c",
+        backgroundColor: "#000",
         marginBottom: "16px",
         padding: "16px",
         borderRadius: "8px",
         position: "relative",
-        border: isSelected ? "2px solid #1dd1a1" : "none",
+        border: isSelected ? "2px solid #a9e6d6ff" : "none",
         transition: "border 0.3s ease",
       }}
     >
       <div onClick={() => onSelect(playlist._id)} style={{ cursor: "pointer" }}>
-        <h3 style={{ marginBottom: "8px" }}>{playlist.name}</h3>
+        <h3 style={{ marginBottom: "8px", color: "#fff" }}>{playlist.name}</h3>
         <p
           style={{
             fontSize: "0.95rem",
@@ -76,21 +82,21 @@ const PlaylistCard = ({ playlist, onDelete, onUpdate, isSelected, onSelect }) =>
         >
           {playlist.description || "No description available."}
         </p>
-        <p>Created by: {playlist.owner?.username}</p>
-        <p>Total videos: {playlist.videos?.length || 0}</p>
+        <p style={{ color: "#aaa" }}>Created by: {playlist.owner?.username}</p>
+        <p style={{ color: "#aaa" }}>Total videos: {playlist.videos?.length || 0}</p>
       </div>
 
       {/* Floating Menu */}
       <div ref={menuRef} style={{ position: "absolute", top: "16px", right: "16px" }}>
         <button
           style={{
-            backgroundColor: "#222",
+            backgroundColor: "#000",
             color: "#fff",
             border: "none",
             borderRadius: "50%",
             width: "36px",
             height: "36px",
-            fontSize: "1.3rem",
+            fontSize: "3 rem",
             cursor: "pointer",
           }}
           onClick={() => setMenuOpen(!menuOpen)}
@@ -98,50 +104,73 @@ const PlaylistCard = ({ playlist, onDelete, onUpdate, isSelected, onSelect }) =>
           ⋮
         </button>
 
-        {menuOpen && (
-          <div
-            style={{
-              position: "absolute",
-              top: "40px",
-              right: "0",
-              backgroundColor: "#2c2c2e",
-              color: "#fff",
-              borderRadius: "6px",
-              padding: "10px",
-              boxShadow: "0 2px 12px rgba(0, 0, 0, 0.5)",
-              fontSize: "0.95rem",
-              minWidth: "160px",
-              zIndex: 100,
-            }}
-          >
-            <div
-              style={{ padding: "8px", cursor: "pointer" }}
-              onClick={() => {
-                setShowUpdateForm(true);
-                setMenuOpen(false);
-              }}
-            >
-              ✏️ Update Playlist
-            </div>
-            <div
-              style={{ padding: "8px", cursor: "pointer", color: "#ff4d4f" }}
-              onClick={handleDelete}
-            >
-              🗑️ Delete Playlist
-            </div>
-          </div>
-        )}
+       {menuOpen && (
+  <div
+    style={{
+      position: "absolute",
+      top: "40px",
+      right: "0",
+      backgroundColor: "#000",
+      color: "#fff",
+      borderRadius: "8px",
+      padding: "8px 0",
+      boxShadow: "0 4px 16px rgba(0, 0, 0, 0)",
+      fontSize: "0.95rem",
+      minWidth: "180px",
+      zIndex: 100,
+      transition: "all 0.3s ease",
+    }}
+  >
+    <div
+      style={{
+        padding: "10px 16px",
+        cursor: "pointer",
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
+        transition: "background 0.2s ease",
+      }}
+      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#3a3a3d")}
+      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+      onClick={() => {
+        setShowUpdateForm(true);
+        setMenuOpen(false);
+      }}
+    >
+      ✏️ <span>Update Playlist</span>
+    </div>
+    <div
+      style={{
+        padding: "10px 16px",
+        cursor: "pointer",
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
+        color: "#ff4d4f",
+        transition: "background 0.2s ease",
+      }}
+      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#3a3a3d")}
+      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+      onClick={handleDelete}
+    >
+      🗑️ <span>Delete Playlist</span>
+    </div>
+  </div>
+)}
       </div>
 
       {/* Update Form */}
       {showUpdateForm && (
         <div
+          ref={formRef}
           style={{
             marginTop: "1rem",
-            backgroundColor: "#1c1c1e",
+            backgroundColor: "#000",
             padding: "1rem",
             borderRadius: "8px",
             maxWidth: "400px",
+            color: "#fff",
+            boxShadow: "0 2px 10px rgba(0,0,0,0.3)",
           }}
         >
           <h4 style={{ marginBottom: "1rem" }}>Update Playlist</h4>
@@ -151,19 +180,71 @@ const PlaylistCard = ({ playlist, onDelete, onUpdate, isSelected, onSelect }) =>
             placeholder="New name"
             value={updatedName}
             onChange={(e) => setUpdatedName(e.target.value)}
+            style={{
+              backgroundColor: "#2c2c2e",
+              color: "#fff",
+              border: "1px solid #444",
+              padding: "8px",
+              borderRadius: "4px",
+              marginBottom: "10px",
+              width: "100%",
+            }}
           />
           <textarea
             className="form-control mb-2"
             placeholder="New description"
             value={updatedDescription}
             onChange={(e) => setUpdatedDescription(e.target.value)}
+            style={{
+              backgroundColor: "#2c2c2e",
+              color: "#fff",
+              border: "1px solid #444",
+              padding: "8px",
+              borderRadius: "4px",
+              marginBottom: "10px",
+              width: "100%",
+              resize: "vertical",
+            }}
           />
-          <button className="btn btn-sm btn-success me-2" onClick={handleUpdate}>
-            Save Changes
-          </button>
-          <button className="btn btn-sm btn-secondary" onClick={() => setShowUpdateForm(false)}>
-            Cancel
-          </button>
+          <div style={{ display: "flex", gap: "10px" }}>
+  <button
+    onClick={handleUpdate}
+    style={{
+      backgroundColor: "#67e8c6ff", 
+      color: "#000",
+      border: "none",
+      padding: "10px 18px",
+      borderRadius: "6px",
+      fontWeight: "600",
+      fontSize: "0.95rem",
+      cursor: "pointer",
+      transition: "background 0.3s ease",
+    }}
+    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#45aa96ff")}
+    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#52b99eff")}
+  >
+    💾 Save
+  </button>
+
+  <button
+    onClick={() => setShowUpdateForm(false)}
+    style={{
+      backgroundColor: "#2c2c2e",
+      color: "#fff",
+      border: "1px solid #444",
+      padding: "10px 18px",
+      borderRadius: "6px",
+      fontWeight: "500",
+      fontSize: "0.95rem",
+      cursor: "pointer",
+      transition: "background 0.3s ease",
+    }}
+    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#3a3a3d")}
+    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#2c2c2e")}
+  >
+    ❌ Cancel
+  </button>
+</div>
         </div>
       )}
     </li>
