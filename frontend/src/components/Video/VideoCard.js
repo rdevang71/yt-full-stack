@@ -14,29 +14,29 @@ const VideoCard = ({ video }) => {
   } = video || {};
 
   return (
-    <Link to={`/video/${_id}`} style={{ textDecoration: "none", color: "inherit" }}>
-      <div className="container-fluid px-0" style={{ marginBottom: "1.8rem" }}>
-        <div
-          className="d-flex flex-column shadow-sm"
-          style={{
-            width: "100%",
-            backgroundColor: "#000",
-            borderRadius: "18px",
-            overflow: "hidden",
-            transition: "transform 0.3s ease, box-shadow 0.3s ease",
-            color: "#fff",
-            position: "relative",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = "scale(1.02)";
-            e.currentTarget.style.boxShadow = "0 8px 20px rgba(0,0,0,0.4)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = "scale(1)";
-            e.currentTarget.style.boxShadow = "none";
-          }}
-        >
-          {/* Thumbnail */}
+    <div className="container-fluid px-0" style={{ marginBottom: "1.8rem" }}>
+      <div
+        className="d-flex flex-column shadow-sm"
+        style={{
+          width: "100%",
+          backgroundColor: "#000",
+          borderRadius: "18px",
+          overflow: "hidden",
+          transition: "transform 0.3s ease, box-shadow 0.3s ease",
+          color: "#fff",
+          position: "relative",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "scale(1.02)";
+          e.currentTarget.style.boxShadow = "0 8px 20px rgba(0,0,0,0.4)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "scale(1)";
+          e.currentTarget.style.boxShadow = "none";
+        }}
+      >
+        {/* Thumbnail (clickable) */}
+        <Link to={`/video/${_id}`} style={{ textDecoration: "none", color: "inherit" }}>
           <div
             style={{
               position: "relative",
@@ -71,13 +71,16 @@ const VideoCard = ({ video }) => {
               {formatDuration(duration)}
             </div>
           </div>
+        </Link>
 
-          {/* Info Section */}
-          <div
-            className="p-3 d-flex flex-column justify-content-between"
-            style={{ flex: 1 }}
-          >
-            <div>
+        {/* Info Section */}
+        <div
+          className="p-3 d-flex flex-column justify-content-between"
+          style={{ flex: 1 }}
+        >
+          <div>
+            {/* Title (clickable) */}
+            <Link to={`/video/${_id}`} style={{ textDecoration: "none", color: "inherit" }}>
               <h3
                 className="mb-2"
                 style={{
@@ -93,46 +96,53 @@ const VideoCard = ({ video }) => {
               >
                 {title}
               </h3>
+            </Link>
 
-              <p
-                className="mb-2"
-                style={{
-                  fontSize: "0.95rem",
-                  color: "#cccccc",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-                title={description}
-              >
-                {description}
-              </p>
+            <p
+              className="mb-2"
+              style={{
+                fontSize: "0.95rem",
+                color: "#cccccc",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+              title={description}
+            >
+              {description}
+            </p>
 
-              <p
-                className="mb-1"
-                style={{
-                  fontSize: "0.95rem",
-                  color: "#eeeeee",
-                }}
-              >
-                👤 <strong>{owner?.username || "Unknown"}</strong>
-              </p>
-              <p
-                className="mb-0"
-                style={{
-                  fontSize: "0.85rem",
-                  color: "#bbbbbb",
-                }}
-              >
-                📅 {createdAt ? new Date(createdAt).toLocaleDateString() : "N/A"} • ⏱️ {formatDuration(duration)}
-              </p>
-            </div>
+            <p
+              className="mb-1"
+              style={{
+                fontSize: "0.95rem",
+                color: "#eeeeee",
+              }}
+            >
+              👤 <strong>{owner?.username || "Unknown"}</strong>
+            </p>
+            <p
+              className="mb-0"
+              style={{
+                fontSize: "0.85rem",
+                color: "#bbbbbb",
+              }}
+            >
+              📅 {createdAt ? new Date(createdAt).toLocaleDateString() : "N/A"} • ⏱️ {formatDuration(duration)}
+            </p>
+          </div>
 
+          {/* Floating Menu (non-clickable area) */}
+          <div
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent bubbling to parent
+            }}
+          >
             <FloatingMenu videoId={_id} />
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 
