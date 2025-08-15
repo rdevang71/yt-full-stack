@@ -7,14 +7,15 @@ const VideoPlayer = () => {
   const { videoId } = useParams();
   const [video, setVideo] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [liked, setLiked] = useState(false); 
+  const [totalLikes, setTotalLikes] = useState(0);
+  const [likeClicked, setLikeClicked] = useState(false);
   const token = localStorage.getItem("token");
 
   const getVideo = async () => {
     try {
       const res = await fetchVideoById(videoId, token);
       setVideo(res);
-      setLiked(res.isLikedByCurrentUser || false); 
+      setTotalLikes(res.totalLikes || 0);
     } catch (err) {
       console.error("Failed to fetch video:", err);
     } finally {
@@ -26,19 +27,18 @@ const VideoPlayer = () => {
     getVideo();
   }, [videoId, token]);
 
-const handleLikeToggle = async () => {
-  try {
-    setLiked((prev) => !prev);
+  const handleLikeToggle = async () => {
+    try {
+      setLikeClicked(true); // trigger animation
 
-    await toggleVideoLike(videoId);
+      const res = await toggleVideoLike(videoId);
+      setTotalLikes(res.data.totalLikes);
 
-    await getVideo();
-  } catch (err) {
-    console.error("Failed to toggle like:", err);
-    setLiked((prev) => !prev);
-  }
-};
-
+      setTimeout(() => setLikeClicked(false), 200); // reset animation
+    } catch (err) {
+      console.error("Failed to toggle like:", err);
+    }
+  };
 
   if (loading) return <p style={{ color: "#fff", padding: "2rem" }}>Loading video...</p>;
   if (!video) return <p style={{ color: "#fff", padding: "2rem" }}>Video not found.</p>;
@@ -67,7 +67,7 @@ const handleLikeToggle = async () => {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          backgroundColor: "#111",
+          backgroundColor: "#000",
           padding: "1rem",
           borderRadius: "12px",
           marginBottom: "1.5rem",
@@ -109,23 +109,27 @@ const handleLikeToggle = async () => {
           </button>
         </div>
 
-        <div style={{ display: "flex", gap: "1rem" }}>
-          <button
-            onClick={handleLikeToggle}
-            style={{
-              padding: "0.5rem 1rem",
-              backgroundColor: liked ? "#1dd1a1" : "#111",
-              color: liked ? "#000" : "#fff",
-              border: liked ? "1px solid #1dd1a1" : "1px solid #333",
-              borderRadius: "20px",
-              cursor: "pointer",
-              fontWeight: "bold",
-              transition: "all 0.3s ease",
-              transform: liked ? "scale(1.05)" : "scale(1)",
-            }}
-          >
-            👍 {liked ? "Liked" : "Like"}
-          </button>
+        <div style={{ display: "flex", gap: "2.5rem", alignItems: "center" }}>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <button
+              onClick={handleLikeToggle}
+              style={{
+                backgroundColor: "#111",
+                color: "#fff",
+                border: "none",
+                borderRadius: "50%",
+                cursor: "pointer",
+                fontSize: "2rem",
+                transition: "transform 0.2s ease",
+                transform: likeClicked ? "scale(1.3)" : "scale(1)",
+              }}
+            >
+             👍🏻
+            </button>
+            <span style={{ color: "#ccc", fontSize: "0.9rem", marginTop: "0.3rem" }}>
+              {totalLikes}
+            </span>
+          </div>
 
           <button
             style={{
