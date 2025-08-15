@@ -26,14 +26,19 @@ const VideoPlayer = () => {
     getVideo();
   }, [videoId, token]);
 
-  const handleLikeToggle = async () => {
-    try {
-      await toggleVideoLike(videoId);
-      await getVideo();
-    } catch (err) {
-      console.error("Failed to toggle like:", err);
-    }
-  };
+const handleLikeToggle = async () => {
+  try {
+    setLiked((prev) => !prev);
+
+    await toggleVideoLike(videoId);
+
+    await getVideo();
+  } catch (err) {
+    console.error("Failed to toggle like:", err);
+    setLiked((prev) => !prev);
+  }
+};
+
 
   if (loading) return <p style={{ color: "#fff", padding: "2rem" }}>Loading video...</p>;
   if (!video) return <p style={{ color: "#fff", padding: "2rem" }}>Video not found.</p>;
